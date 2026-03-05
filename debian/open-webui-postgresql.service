@@ -1,0 +1,63 @@
+[Unit]
+Description=Postgresql Docker Container
+# Only start after Docker is ready
+After=docker.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=simple
+
+# Environment files
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/open-webui/open-webui-postgresql.conf
+EnvironmentFile=-/run/open-webui/open-webui-postgresql.conf
+
+# Remove any existing container with this name before starting
+ExecStartPre=-/usr/bin/docker rm -f owebui_postgresql
+# Check if Docker image is available
+ExecStartPre=/usr/lib/open-webui-tools/owebui_postgresql_env_cond \
+    /etc/open-webui/open-webui-postgresql.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-postgresql.conf
+# Generate dynamic environment file
+ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
+ExecStartPre=/usr/lib/open-webui-tools/owebui_postgresql_env_pre \
+    /etc/open-webui/open-webui-postgresql.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-postgresql.conf
+# Post process
+ExecStartPost=/usr/lib/open-webui-tools/owebui_postgresql_env_post \
+    /etc/open-webui/open-webui-postgresql.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-postgresql.conf
+
+# Start the container in the foreground (no -d flag)
+ExecStart=/usr/bin/docker run \
+  --name owebui_postgresql \
+  --rm \
+  -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
+  -e POSTGRES_USER=${POSTGRES_USER} \
+  -e POSTGRES_DB=${POSTGRES_DB} \
+  $PORTMAP_CMD $PORTMAP_ARG \
+  -v ${OWEBUI_POSTGRESQL}:/var/lib/postgresql/18/docker \
+  ${POSTGRES_IMAGE}
+
+# Gracefully stop the container
+ExecStop=/usr/bin/docker stop -t 30 owebui_postgresql
+
+# Timeout for start operation
+TimeoutStartSec=60
+# Timeout for stop operation
+TimeoutStopSec=35
+
+# Always restart on failure
+Restart=always
+RestartSec=45
+
+[Install]
+WantedBy=multi-user.target

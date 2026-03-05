@@ -1,0 +1,4 @@
+# Caddy configuration file
+http:// {
+   reverse_proxy {APP_IP}:{APP_PORT}
+}

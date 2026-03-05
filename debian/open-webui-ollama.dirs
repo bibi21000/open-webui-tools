@@ -1,0 +1,4 @@
+etc/open-webui
+usr/bin
+usr/lib/open-webui-tools
+usr/lib/systemd/system

@@ -1,0 +1,68 @@
+[Unit]
+Description=Caddy Docker Container
+# Only start after Docker is ready
+After=docker.service
+After=open-webui-app.service
+Requires=docker.service
+Requires=open-webui-app.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=simple
+
+# Environment files
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/open-webui/open-webui-caddy.conf
+EnvironmentFile=-/run/open-webui/open-webui-caddy.conf
+
+# Remove any existing container with this name before starting
+ExecStartPre=-/usr/bin/docker rm -f owebui_caddy
+# Check if Docker image is available
+ExecStartPre=/usr/lib/open-webui-tools/owebui_caddy_env_cond \
+    /etc/open-webui/open-webui-app.conf \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-caddy.conf
+# Generate dynamic environment file
+ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
+ExecStartPre=/usr/lib/open-webui-tools/owebui_caddy_env_pre \
+    /etc/open-webui/open-webui-app.conf \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-caddy.conf
+# Post process
+ExecStartPost=/usr/lib/open-webui-tools/owebui_caddy_env_post \
+    /etc/open-webui/open-webui-app.conf \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-caddy.conf
+
+# Start the container in the foreground (no -d flag)
+ExecStart=/usr/bin/docker run \
+  --name owebui_caddy \
+  --rm \
+  $PORTMAP_CMD $PORTMAP_ARG \
+  $PORTMAP_CMD_SSL $PORTMAP_ARG_SSL \
+  $PORTMAP_CMD_SSL $PORTMAP_ARG_UDP \
+  -v ${OWEBUI_CADDY}/www:/data \
+  -v ${OWEBUI_CADDY}/conf:/etc/caddy \
+  ${CADDY_IMAGE}
+
+# Gracefully stop the container
+ExecStop=/usr/bin/docker stop -t 30 owebui_caddy
+
+# Timeout for start operation
+TimeoutStartSec=60
+# Timeout for stop operation
+TimeoutStopSec=35
+
+# Always restart on failure
+Restart=always
+RestartSec=45
+
+[Install]
+WantedBy=multi-user.target

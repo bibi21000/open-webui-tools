@@ -1,0 +1,18 @@
+[Unit]
+Description=Update Postresql Docker Container
+# Only start after Docker is ready
+After=docker.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=oneshot
+
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/open-webui/open-webui-postgresql.conf
+
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${POSTGRES_IMAGE} open-webui-postgresql
+
+[Install]
+WantedBy=multi-user.target

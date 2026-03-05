@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["owebui_tools"]
+
+[project]
+name = "owebui_tools"
+authors = [
+  {name = "bibi21000", email = "bibi21000@gmail.com"},
+]
+maintainers = [
+  {name = "bibi21000", email = "bibi21000@gmail.com"}
+]
+description = "Library for open-webui-tools"
+version = "0.0.1"
+requires-python = ">=3.9"
+dependencies = [
+    "requests",
+]
+
+[project.urls]
+HomePage = "https://github.com/bibi21000/open-webui-tools"
+Issues = "https://github.com/bibi21000/open-webui-tools/issues"
+

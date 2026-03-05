@@ -1,0 +1,4 @@
+etc/default
+etc/open-webui
+usr/bin
+usr/lib/python3/dist-packages

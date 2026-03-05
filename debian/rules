@@ -1,0 +1,53 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	install -m 640 open_webui.default debian/open-webui-common/etc/default/open_webui
+	install -m 640 open-webui-local.conf debian/open-webui-common/etc/open-webui/open-webui-local.conf
+	install -m 755 owebui.py debian/open-webui-common/usr/bin/owebui
+	python3 -m venv --system-site-packages debian/owebui-tmp
+	ls pip/
+#~ 	debian/owebui-tmp/bin/pip3 install setuptools --no-build-isolation --no-index --find-links pip/ --no-cache-dir --no-binary ":all:" --ignore-requires-python --no-deps
+	debian/owebui-tmp/bin/pip3 install . --no-build-isolation --no-index --find-links pip/ --no-cache-dir --no-binary ":all:" --ignore-requires-python --no-deps
+	ls -lR debian/owebui-tmp/lib/
+	mv debian/owebui-tmp/lib/*/site-packages/owebui_tools* debian/open-webui-common/usr/lib/python3/dist-packages/
+	rm debian/open-webui-common/usr/lib/python3/dist-packages/owebui_tools*/direct_url.json
+	rm -rf debian/open-webui-common/usr/lib/python3/dist-packages/owebui_tools*/__pycache__
+
+	install -m 755 owebui_docker_update.py debian/open-webui-docker/usr/lib/open-webui-tools/owebui_docker_update
+
+	install -m 755 owebui_app_env.py debian/open-webui-app/usr/lib/open-webui-tools/owebui_app_env
+	install -m 640 open-webui-app.conf debian/open-webui-app/etc/open-webui/open-webui-app.conf
+	install -D -m 644 debian/open-webui-app-update.service debian/open-webui-app/usr/lib/systemd/system/open-webui-app-update.service
+	install -D -m 644 debian/open-webui-app-update.timer debian/open-webui-app/usr/lib/systemd/system/open-webui-app-update.timer
+	dh_installsystemd -p open-webui-app --no-enable --no-start --name=open-webui-app-update open-webui-app-update.service
+	dh_installsystemd -p open-webui-app --no-enable --no-start --name=open-webui-app-update open-webui-app-update.timer
+
+	install -m 755 owebui_ollama_env.py debian/open-webui-ollama/usr/lib/open-webui-tools/owebui_ollama_env
+	install -m 755 owebui_ollama.py debian/open-webui-ollama/usr/bin/owebui_ollama
+	install -m 640 open-webui-ollama.conf debian/open-webui-ollama/etc/open-webui/open-webui-ollama.conf
+	install -D -m 644 debian/open-webui-ollama-update.service debian/open-webui-ollama/usr/lib/systemd/system/open-webui-ollama-update.service
+	install -D -m 644 debian/open-webui-ollama-update.timer debian/open-webui-ollama/usr/lib/systemd/system/open-webui-ollama-update.timer
+	dh_installsystemd -p open-webui-ollama --no-enable --no-start --name=open-webui-ollama-update open-webui-ollama-update.service
+	dh_installsystemd -p open-webui-ollama --no-enable --no-start --name=open-webui-ollama-update open-webui-ollama-update.timer
+
+	install -m 755 owebui_postgresql_env.py debian/open-webui-postgresql/usr/lib/open-webui-tools/owebui_postgresql_env
+	install -m 640 open-webui-postgresql.conf debian/open-webui-postgresql/etc/open-webui/open-webui-postgresql.conf
+	install -D -m 644 debian/open-webui-postgresql-update.service debian/open-webui-postgresql/usr/lib/systemd/system/open-webui-postgresql-update.service
+	install -D -m 644 debian/open-webui-postgresql-update.timer debian/open-webui-postgresql/usr/lib/systemd/system/open-webui-postgresql-update.timer
+	dh_installsystemd -p open-webui-postgresql --no-enable --no-start --name=open-webui-postgresql-update open-webui-postgresql-update.service
+	dh_installsystemd -p open-webui-postgresql --no-enable --no-start --name=open-webui-postgresql-update open-webui-postgresql-update.timer
+
+	install -m 755 owebui_caddy_env.py debian/open-webui-caddy/usr/lib/open-webui-tools/owebui_caddy_env
+	install -m 640 open-webui-caddy.conf debian/open-webui-caddy/etc/open-webui/open-webui-caddy.conf
+	install -m 644 Caddyfile debian/open-webui-caddy/etc/open-webui/Caddyfile
+	install -D -m 644 debian/open-webui-caddy-update.service debian/open-webui-caddy/usr/lib/systemd/system/open-webui-caddy-update.service
+	install -D -m 644 debian/open-webui-caddy-update.timer debian/open-webui-caddy/usr/lib/systemd/system/open-webui-caddy-update.timer
+	dh_installsystemd -p open-webui-caddy --no-enable --no-start --name=open-webui-caddy-update open-webui-caddy-update.service
+	dh_installsystemd -p open-webui-caddy --no-enable --no-start --name=open-webui-caddy-update open-webui-caddy-update.timer
+
