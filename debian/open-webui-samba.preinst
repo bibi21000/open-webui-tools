@@ -13,7 +13,7 @@ set -e
 
 
 case "$1" in
-    install|upgrade)
+    install)
 
         # If the package has default file it could be sourced, so that
         # the local admin can overwrite the defaults
@@ -24,7 +24,7 @@ case "$1" in
 
         [ -z "$OWEBUI_USER" ] && OWEBUI_USER=owebui
         [ -z "$OWEBUI_GROUP" ] && OWEBUI_GROUP=owebui
-        [ -z "$OWEBUI_SHARE" ] && OWEBUI_SHARE=/var/lib/owebui/share
+        [ -z "$OWEBUI_SHARE" ] && OWEBUI_SHARE=/var/lib/owebui/sharee
 
         test -d $OWEBUI_SHARE || mkdir $OWEBUI_SHARE
         if ! dpkg-statoverride --list $OWEBUI_SHARE >/dev/null
@@ -33,6 +33,7 @@ case "$1" in
           chown $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_SHARE
           chmod u=rwx,g=rxs,o= $OWEBUI_SHARE
         fi
+    ;;
 
     upgrade)
     ;;

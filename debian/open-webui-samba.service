@@ -1,0 +1,61 @@
+[Unit]
+Description=Samba Docker Container
+# Only start after Docker is ready
+After=docker.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=simple
+
+# Environment files
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/open-webui/open-webui-samba.conf
+EnvironmentFile=-/run/open-webui/open-webui-samba.conf
+
+# Remove any existing container with this name before starting
+ExecStartPre=-/usr/bin/docker rm -f owebui_samba
+# Check if Docker image is available
+ExecStartPre=/usr/lib/open-webui-tools/owebui_samba_env_cond \
+    /etc/open-webui/open-webui-samba.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-samba.conf
+# Generate dynamic environment file
+ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
+ExecStartPre=/usr/lib/open-webui-tools/owebui_samba_env_pre \
+    /etc/open-webui/open-webui-samba.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-samba.conf
+# Post process
+ExecStartPost=/usr/lib/open-webui-tools/owebui_samba_env_post \
+    /etc/open-webui/open-webui-samba.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-samba.conf
+
+# Start the container in the foreground (no -d flag)
+ExecStart=/usr/bin/docker run \
+  --name owebui_samba \
+  --rm \
+  $PORTMAP_CMD_DS $PORTMAP_ARG_DS \
+  $PORTMAP_CMD_SSN $PORTMAP_ARG_SSN \
+  -v ${OWEBUI_SHARE}:/mnt \
+  ${SAMBA_IMAGE}
+
+# Gracefully stop the container
+ExecStop=/usr/bin/docker stop -t 30 owebui_samba
+
+# Timeout for start operation
+TimeoutStartSec=60
+# Timeout for stop operation
+TimeoutStopSec=35
+
+# Always restart on failure
+Restart=always
+RestartSec=45
+
+[Install]
+WantedBy=multi-user.target
