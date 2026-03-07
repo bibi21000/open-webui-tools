@@ -24,14 +24,14 @@ case "$1" in
     purge)
         if test -f "/tmp/open-webui-app.conf"; then
             . /tmp/open-webui-app.conf
-            [ -f "/etc/default/open_webui" ] && . /tmp/open_webui
+            [ -f "/tmp/open_webui" ] && . /tmp/open_webui
             if ! test -z "$(docker images -q ${OWEBUI_IMAGE} 2> /dev/null)" ; then
                 docker image rm ${OWEBUI_IMAGE}
             fi
             rm -f "/tmp/open-webui-app.conf"
             rm -f "/tmp/open_webui"
         fi
-        [ -f "/etc/default/open_webui" ] && . /tmp/open_webui
+        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
         [ ! -z "$OWEBUI_APP" ] && rm -rf $OWEBUI_APP
     ;;
 

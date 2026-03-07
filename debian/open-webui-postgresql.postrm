@@ -24,14 +24,14 @@ case "$1" in
     purge)
         if test -f "/tmp/open-webui-postgresql.conf"; then
             . /tmp/open-webui-postgresql.conf
-            [ -f "/etc/default/open_webui" ] && . /tmp/open_webui
+            [ -f "/tmp/open_webui" ] && . /tmp/open_webui
             if ! test -z "$(docker images -q ${POSTGRES_IMAGE} 2> /dev/null)" ; then
                 docker image rm ${POSTGRES_IMAGE}
             fi
             rm -f "/tmp/open-webui-postgresql.conf"
             rm -f "/tmp/open_webui"
         fi
-        [ -f "/etc/default/open_webui" ] && . /tmp/open_webui
+        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
         [ ! -z "$OWEBUI_POSTGRESQL" ] && rm -rf $OWEBUI_POSTGRESQL
     ;;
 

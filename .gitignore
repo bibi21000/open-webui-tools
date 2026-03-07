@@ -164,4 +164,5 @@ cython_debug/
 # Local
 open-webui-tools.geany
 olds/
+open-webui/
 

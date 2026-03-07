@@ -24,14 +24,14 @@ case "$1" in
     purge)
         if test -f "/tmp/open-webui-caddy.conf"; then
             . /tmp/open-webui-caddy.conf
-            [ -f "/etc/default/open_webui" ] && . /tmp/open_webui
+            [ -f "/tmp/open_webui" ] && . /tmp/open_webui
             if ! test -z "$(docker images -q ${CADDY_IMAGE} 2> /dev/null)" ; then
                 docker image rm ${CADDY_IMAGE}
             fi
             rm -f "/tmp/open-webui-caddy.conf"
             rm -f "/tmp/open_webui"
         fi
-        [ -f "/etc/default/open_webui" ] && . /tmp/open_webui
+        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
         [ ! -z "$OWEBUI_CADDY" ] && rm -rf $OWEBUI_CADDY
     ;;
 

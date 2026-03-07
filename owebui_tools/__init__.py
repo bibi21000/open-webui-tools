@@ -21,7 +21,7 @@ def parse_files(files, dockerapp):
                     pass
     return sysd, docker
 
-def get_container_ip(container, docker_cmd=None):
+def get_container_ip(container, docker_cmd=None, time_out=10, time_sleep=0.5):
     import sys
     import subprocess
     import time
@@ -30,13 +30,13 @@ def get_container_ip(container, docker_cmd=None):
         import shutil
         docker_cmd = shutil.which('docker')
 
-    for i in range(30):
+    for i in range(int(time_out / time_sleep)):
         p = subprocess.run([docker_cmd, 'inspect', '-f',
                     "'{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}'",
                     container],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if p.returncode != 0:
-            time.sleep(0.5)
+            time.sleep(time_sleep)
         else:
             ctip = p.stdout.split('\n')[0].strip("\'")
             break

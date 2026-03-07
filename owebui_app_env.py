@@ -4,6 +4,7 @@ import sys
 if sys.argv[0].endswith('owebui_app_env_post'):
     pass
 
+
 elif sys.argv[0].endswith('owebui_app_env_pre'):
     import subprocess
     import shutil
@@ -15,22 +16,24 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
     docker_cmd = shutil.which('docker')
 
     if ("POSTGRES_HOST" not in data or data['POSTGRES_HOST'] == "" or data['POSTGRES_HOST'] == "127.0.0.1"):
-        pgip = get_container_ip("owebui_postgresql", docker_cmd=docker_cmd)
-    else:
-        pgip = data['POSTGRES_HOST']
-    if ("POSTGRES_PORT" not in data or data['POSTGRES_PORT'] == ""):
+        pgip = get_container_ip("owebui_postgresql", docker_cmd=docker_cmd, time_out=10)
         pgport = 5432
     else:
-        pgport = data['POSTGRES_PORT']
+        pgip = data['POSTGRES_HOST']
+        if ("POSTGRES_PORT" not in data or data['POSTGRES_PORT'] == ""):
+            pgport = 5432
+        else:
+            pgport = data['POSTGRES_PORT']
 
     if ("OLLAMA_HOST" not in data or data['OLLAMA_HOST'] == "" or data['OLLAMA_HOST'] == "127.0.0.1"):
-        olip = get_container_ip("owebui_ollama", docker_cmd=docker_cmd)
-    else:
-        olip = data['OLLAMA_HOST']
-    if ("OLLAMA_PORT" not in data or data['OLLAMA_PORT'] == ""):
+        olip = get_container_ip("owebui_ollama", docker_cmd=docker_cmd, time_out=10)
         olport = 11434
     else:
-        olport = data['OLLAMA_PORT']
+        olip = data['OLLAMA_HOST']
+        if ("OLLAMA_PORT" not in data or data['OLLAMA_PORT'] == ""):
+            olport = 11434
+        else:
+            olport = data['OLLAMA_PORT']
 
     with open(retf, 'w') as f:
         if ("OWEBUI_HOST" not in data or data['OWEBUI_HOST'] == "") and \
@@ -46,14 +49,24 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
         else:
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG="%s:%s:8080"\n' % (data['OWEBUI_HOST'], data['OWEBUI_PORT']))
-        f.write(f"DATABASE_URL=postgresql://{data['POSTGRES_USER']}:{data['POSTGRES_PASSWORD']}@{pgip}:{pgport}/{data['POSTGRES_DB']}\n")
-        f.write(f"PGVECTOR_DB_URL=postgresql://{data['POSTGRES_USER']}:{data['POSTGRES_PASSWORD']}@{pgip}:{pgport}/{data['POSTGRES_DB']}\n")
-        f.write(f"OLLAMA_BASE_URL=http://{olip}:{olport}\n")
+        docker_db = f"DATABASE_URL=postgresql://{data['POSTGRES_USER']}:{data['POSTGRES_PASSWORD']}@{pgip}:{pgport}/{data['POSTGRES_DB']}"
+        f.write(docker_db + '\n')
+        docker_pgv = f"PGVECTOR_DB_URL=postgresql://{data['POSTGRES_USER']}:{data['POSTGRES_PASSWORD']}@{pgip}:{pgport}/{data['POSTGRES_DB']}"
+        f.write(docker_pgv + '\n')
+        docker_ol = f"OLLAMA_BASE_URL=http://{olip}:{olport}"
+        sdockerenv = f"-e {docker_db} -e {docker_ol} "
+        f.write(docker_ol + '\n')
+        if 'VECTOR_DB' in dockerenv:
+            sdockerenv += f"-e {docker_pgv} "
+        for ev in dockerenv:
+            sdockerenv += f'-e {ev}={dockerenv[ev]} '
+        f.write(f"OWEBUI_ENV={sdockerenv}\n")
+
 
 elif sys.argv[0].endswith('owebui_app_env_cond'):
     import shutil
     import subprocess
-    from owebui_tools import get_container_ip, parse_files
+    from owebui_tools import parse_files
 
     retf = sys.argv[-1]
     data, _ = parse_files(sys.argv[1:-1], "app")

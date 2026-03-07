@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-VERSION:=0.0.11
+VERSION:=0.0.16
 DEBVERSION:=1
 ifndef DIST
 	DIST=jammy
@@ -22,6 +22,8 @@ open-webui-tools-$(VERSION):
 	cp -rfa owebui_tools open-webui-tools-$(VERSION)/
 	cp -rfa pip open-webui-tools-$(VERSION)/
 	cp -a pyproject.toml open-webui-tools-$(VERSION)/
+	cp -a README.md open-webui-tools-$(VERSION)/
+	cp -a README_ollama.md open-webui-tools-$(VERSION)/
 
 open-webui-tools_$(VERSION).orig.tar.gz: open-webui-tools-$(VERSION)
 	debchange --newversion $(VERSION)-$(DEBVERSION) "$(CHANGELOG)"
@@ -39,10 +41,13 @@ open-webui-tools_$(VERSION)-$(DEBVERSION)_source.changes: clean open-webui-tools
 	lintian open-webui-tools_$(VERSION)-$(DEBVERSION)~${DIST}1_source.changes
 	dput myppa:open-webui-tools open-webui-tools_$(VERSION)-$(DEBVERSION)~${DIST}1_source.changes
 
-ppa: open-webui-tools_$(VERSION).orig.tar.gz
+ppa:
+	rm -rf open-webui-tools-$(VERSION)
+	$(MAKE) open-webui-tools_$(VERSION).orig.tar.gz
 	$(MAKE) DIST=noble open-webui-tools_$(VERSION)-$(DEBVERSION)_source.changes
-	$(MAKE) DIST=jammy open-webui-tools_$(VERSION)-$(DEBVERSION)_source.changes
 
 purge:
 	-mv *.dsc *.debian.tar.xz *.buildinfo *.changes *.deb *.upload *.orig.tar.gz  olds/
+	rm -f ../open-webui-tools_*
+	rm -f ../open-webui*.deb
 	-dpkg-buildpackage --pre-clean

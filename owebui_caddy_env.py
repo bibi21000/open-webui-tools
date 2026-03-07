@@ -1,37 +1,30 @@
 #!/usr/bin/python3
-import os
 import sys
-
-retf = sys.argv[-1]
-data = {}
-for f in sys.argv[1:-1]:
-    with open(f, 'r') as f:
-        for line in f.read().split('\n'):
-            try:
-                k, v = line.split('=', 1)
-                data[k] = v
-            except Exception:
-                pass
 
 if sys.argv[0].endswith('owebui_caddy_env_post'):
     pass
 
+
 elif sys.argv[0].endswith('owebui_caddy_env_pre'):
+    import os
     import subprocess
     import shutil
-    from owebui_tools import get_container_ip
+    from owebui_tools import get_container_ip, parse_files
+
+    retf = sys.argv[-1]
+    data, dockerenv = parse_files(sys.argv[1:-1], "caddy")
 
     docker_cmd = shutil.which('docker')
 
     if ("OWEBUI_HOST" not in data or data['OWEBUI_HOST'] == "" or data['OWEBUI_HOST'] == "127.0.0.1"):
         appip = get_container_ip("owebui_app", docker_cmd=docker_cmd)
-    else:
-        appip = data['OWEBUI_HOST']
-    if ("OWEBUI_PORT" not in data or data['OWEBUI_PORT'] == "") or \
-       ("OWEBUI_HOST" not in data or data['OWEBUI_HOST'] == "" or data['OWEBUI_HOST'] == "127.0.0.1"):
         appport = '8080'
     else:
-        appport = data['OWEBUI_PORT']
+        appip = data['OWEBUI_HOST']
+        if ("OWEBUI_PORT" not in data or data['OWEBUI_PORT'] == ""):
+            appport = '8080'
+        else:
+            appport = data['OWEBUI_PORT']
 
     with open(retf, 'w') as f:
 
@@ -71,9 +64,15 @@ elif sys.argv[0].endswith('owebui_caddy_env_pre'):
             for line in t:
                 f.write(line.replace('{APP_IP}', appip).replace('{APP_PORT}', appport))
 
+
 elif sys.argv[0].endswith('owebui_caddy_env_cond'):
     import shutil
     import subprocess
+    from owebui_tools import parse_files
+
+    retf = sys.argv[-1]
+    data, _ = parse_files(sys.argv[1:-1], "caddy")
+
     docker_cmd = shutil.which('docker')
 
     p = subprocess.run([docker_cmd, 'inspect', "--format='{{.Id}}", data['CADDY_IMAGE']], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
