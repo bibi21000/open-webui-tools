@@ -9,8 +9,9 @@ After=network-online.target
 [Service]
 Type=oneshot
 
-EnvironmentFile=/etc/default/open_webui
 EnvironmentFile=/etc/open-webui/open-webui-ollama.conf
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
 ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${OLLAMA_IMAGE} open-webui-ollama
 

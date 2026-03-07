@@ -25,13 +25,18 @@ case "$1" in
         if test -f "/tmp/open-webui-app.conf"; then
             . /tmp/open-webui-app.conf
             [ -f "/tmp/open_webui" ] && . /tmp/open_webui
+            [ -f "/tmp/open-webui-local.conf" ] && . /tmp/open-webui-local.conf
             if ! test -z "$(docker images -q ${OWEBUI_IMAGE} 2> /dev/null)" ; then
                 docker image rm ${OWEBUI_IMAGE}
             fi
+            if test -v OWEBUI_IMAGE_SRC && test -n ${OWEBUI_IMAGE_SRC} && \
+              test -n "$(docker images -q ${OWEBUI_IMAGE_SRC} 2> /dev/null)" ; then
+                docker image rm ${OWEBUI_IMAGE_SRC}
+            fi
             rm -f "/tmp/open-webui-app.conf"
-            rm -f "/tmp/open_webui"
         fi
         [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
+        [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
         [ ! -z "$OWEBUI_APP" ] && rm -rf $OWEBUI_APP
     ;;
 

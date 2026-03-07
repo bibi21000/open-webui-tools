@@ -41,3 +41,4 @@ elif sys.argv[0].endswith('owebui_ollama_env_cond'):
         print("Can't find docker image %s. Delayed start" % (data['OLLAMA_IMAGE']), file=sys.stderr)
         sys.exit(1)
 
+

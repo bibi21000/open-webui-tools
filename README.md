@@ -1,5 +1,10 @@
 # open-webui-tools
 
+This tutorial will guide you through installing Open WebUI connected to a
+PostgreSQL database (with the "vector" extension) and an Olama server.
+
+It uses Docker images and stores data on disk in separate directories within /var/lib/owebui.
+
 
 - Add ppa to your system
 
@@ -21,13 +26,84 @@
 
     > sudo apt install open-webui
 
+    Check status
+
+    > sudo owebui status
+
+        > open-webui-postgresql : activating
+        > open-webui-ollama : activating
+        > open-webui-app : inactive
+
 - Configure.
 
     Modify the Docker images and configuration settings according to your hardware and needs.
 
     You can edit the files open-webui-app.conf, open-webui-ollama.conf, open-webui-postgresql.conf directly
-    or put your changes in open-webui-local.conf(this file has priority)
+    or put your changes in open-webui-local.conf(this file has priority) in /etc/open-webui.
 
-    Update your installation
+    You can define environment variable to pass to docker container by prefixing them with (service)_.
+    For example, to change the logging level for the Open WebUI application, set app_GLOBAL_LOG_LEVEL=WARNING
 
-    > sudo owebui update
+    Environment Variable for OpenWeb UI : https://docs.openwebui.com/reference/env-configuration/
+
+    Environment Variable for OpenWeb UI : https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image
+
+
+- Update and start.
+
+    Update your installation. Following command will download all docker images and models defined in configuration.
+
+    > sudo owebui update --force --models --restart
+
+        > Update POSTGRES_IMAGE for open-webui-postgresql
+        > Image pgvector/pgvector:pg18-trixie not found. Download it
+        > Id for pgvector/pgvector:pg18-trixie : 'sha256:cdc8b3de66a0fbffceef90077fde8845a2346034ad8f309f4022a84039fed955
+        > Service open-webui-postgresql restarted after update
+
+        > Update OLLAMA_IMAGE for open-webui-ollama
+        > Image ollama/ollama not found. Download it
+        > Id for ollama/ollama : 'sha256:f2de8ed54c7b02ee05e42abaa454978c76fb552a883877b37588ebb62f31e41a
+        > Service open-webui-ollama restarted after update
+
+        > Install ollama models
+        > Install model llama3.2
+
+        > Update OWEBUI_IMAGE for open-webui-app
+        > Image ghcr.io/open-webui/open-webui:cuda not found. Download it
+        > Id for ghcr.io/open-webui/open-webui:cuda : 'sha256:a301ed36e18a3507ec4f6edcdbff67bc7ef7a9f07824ac4c240799371dc75dfe
+        > Service open-webui-app restarted after update
+
+
+- That's all
+
+    All services should be operational
+
+    > sudo owebui status
+
+        > open-webui-postgresql : active
+        > open-webui-ollama : active
+        > open-webui-app : active
+
+   You can now connect to http://127.0.0.1:8080
+
+- If you plan to connect from outside, it is recommended to use a frontend like Caddy.
+
+    > sudo apt install open-webui-caddy
+
+    Update the Caddyfile in /etc/open-webui. {APP_IP} and {APP_PORT} will
+    be replaced with the appropriate values ​​when the service starts.
+
+    You can find more documentation here : https://caddyserver.com/docs/caddyfile
+
+    Downloag docker image and start service
+
+    > sudo owebui update --restart open-webui-caddy
+
+    Check status
+
+    > sudo owebui status
+
+        > open-webui-postgresql : active
+        > open-webui-ollama : active
+        > open-webui-app : active
+        > open-webui-caddy : active

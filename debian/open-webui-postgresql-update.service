@@ -9,8 +9,9 @@ After=network-online.target
 [Service]
 Type=oneshot
 
-EnvironmentFile=/etc/default/open_webui
 EnvironmentFile=/etc/open-webui/open-webui-postgresql.conf
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
 ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${POSTGRES_IMAGE} open-webui-postgresql
 

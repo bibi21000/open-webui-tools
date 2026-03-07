@@ -10,8 +10,9 @@ After=network-online.target
 Type=simple
 
 # Environment files
-EnvironmentFile=/etc/default/open_webui
 EnvironmentFile=/etc/open-webui/open-webui-ollama.conf
+EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 EnvironmentFile=-/run/open-webui/open-webui-ollama.conf
 
 # Remove any existing container with this name before starting

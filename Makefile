@@ -1,6 +1,5 @@
 #!/usr/bin/make -f
-
-VERSION:=0.0.16
+VERSION:=0.0.17
 DEBVERSION:=1
 ifndef DIST
 	DIST=jammy
@@ -8,7 +7,6 @@ endif
 ifndef CHANGELOG
 	CHANGELOG="New upstream version"
 endif
-
 
 clean:
 	rm -Rf build debian/owebui-tmp
@@ -22,8 +20,6 @@ open-webui-tools-$(VERSION):
 	cp -rfa owebui_tools open-webui-tools-$(VERSION)/
 	cp -rfa pip open-webui-tools-$(VERSION)/
 	cp -a pyproject.toml open-webui-tools-$(VERSION)/
-	cp -a README.md open-webui-tools-$(VERSION)/
-	cp -a README_ollama.md open-webui-tools-$(VERSION)/
 
 open-webui-tools_$(VERSION).orig.tar.gz: open-webui-tools-$(VERSION)
 	debchange --newversion $(VERSION)-$(DEBVERSION) "$(CHANGELOG)"
@@ -33,7 +29,6 @@ open-webui-tools-$(VERSION)/debian: open-webui-tools-$(VERSION)
 	-dpkg-buildpackage --pre-clean
 	cp -Rf debian open-webui-tools-$(VERSION)/
 	cp -a README.md open-webui-tools-$(VERSION)/debian/
-	cp -a README_ollama.md open-webui-tools-$(VERSION)/debian/
 
 open-webui-tools_$(VERSION)-$(DEBVERSION)_source.changes: clean open-webui-tools-$(VERSION)/debian
 	cd open-webui-tools-$(VERSION) && dch -l "~${DIST}" --distribution "${DIST}" "Build for PPA"

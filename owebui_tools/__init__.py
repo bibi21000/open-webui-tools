@@ -11,6 +11,8 @@ def parse_files(files, dockerapp):
     for f in files:
         with open(f, 'r') as f:
             for line in f.read().split('\n'):
+                if line == "" or line.startswith("#"):
+                    continue
                 try:
                     k, v = line.split('=', 1)
                     if k.startswith(dockerapp):

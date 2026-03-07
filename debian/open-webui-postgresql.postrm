@@ -25,12 +25,17 @@ case "$1" in
         if test -f "/tmp/open-webui-postgresql.conf"; then
             . /tmp/open-webui-postgresql.conf
             [ -f "/tmp/open_webui" ] && . /tmp/open_webui
+            [ -f "/tmp/open-webui-local.conf" ] && . /tmp/open-webui-local.conf
             if ! test -z "$(docker images -q ${POSTGRES_IMAGE} 2> /dev/null)" ; then
                 docker image rm ${POSTGRES_IMAGE}
             fi
+            if test -v POSTGRES_IMAGE_SRC && test -n ${POSTGRES_IMAGE_SRC} && \
+              test -n "$(docker images -q ${POSTGRES_IMAGE_SRC} 2> /dev/null)" ; then
+                docker image rm ${POSTGRES_IMAGE_SRC}
+            fi
             rm -f "/tmp/open-webui-postgresql.conf"
-            rm -f "/tmp/open_webui"
         fi
+        [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
         [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
         [ ! -z "$OWEBUI_POSTGRESQL" ] && rm -rf $OWEBUI_POSTGRESQL
     ;;

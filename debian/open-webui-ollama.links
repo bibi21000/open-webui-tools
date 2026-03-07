@@ -1,3 +1,4 @@
 usr/lib/open-webui-tools/owebui_ollama_env usr/lib/open-webui-tools/owebui_ollama_env_pre
 usr/lib/open-webui-tools/owebui_ollama_env usr/lib/open-webui-tools/owebui_ollama_env_post
 usr/lib/open-webui-tools/owebui_ollama_env usr/lib/open-webui-tools/owebui_ollama_env_cond
+usr/lib/open-webui-tools/owebui_ollama_env usr/lib/open-webui-tools/owebui_ollama_env_upgrade

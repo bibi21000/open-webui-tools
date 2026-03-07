@@ -1,9 +1,10 @@
-open-webui-tools (0.0.15-1) UNRELEASED; urgency=medium
+open-webui-tools (0.0.16-1) UNRELEASED; urgency=medium
 
   * Initial release
   * New upstream version
   * New upstream version
   * New upstream version
   * New upstream version
+  * New upstream version
 
- -- Sebastien GALLET <bibi21000@gmail.com>  Fri, 06 Mar 2026 13:13:11 +0100
+ -- Sebastien GALLET <bibi21000@gmail.com>  Sat, 07 Mar 2026 02:16:08 +0100
