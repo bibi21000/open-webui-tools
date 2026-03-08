@@ -41,7 +41,7 @@ It uses Docker images and stores data on disk in separate directories within /va
     Modify the Docker images and configuration settings according to your hardware and needs.
 
     You can edit the files open-webui-app.conf, open-webui-ollama.conf, open-webui-postgresql.conf directly
-    or put your changes in open-webui-local.conf(this file has priority) in /etc/open-webui.
+    or put your changes in open-webui-local.conf(this file has priority and is recommended) in /etc/open-webui.
 
     You can define environment variable to pass to docker container by prefixing them with (service)_.
     For example, to change the logging level for the Open WebUI application, set app_GLOBAL_LOG_LEVEL=WARNING
@@ -74,7 +74,6 @@ It uses Docker images and stores data on disk in separate directories within /va
         > Image ghcr.io/open-webui/open-webui:cuda not found. Download it
         > Id for ghcr.io/open-webui/open-webui:cuda : 'sha256:a301ed36e18a3507ec4f6edcdbff67bc7ef7a9f07824ac4c240799371dc75dfe
         > Service open-webui-app restarted after update
-
 
 - That's all
 
@@ -109,3 +108,22 @@ It uses Docker images and stores data on disk in separate directories within /va
         > open-webui-ollama : active
         > open-webui-app : active
         > open-webui-caddy : active
+
+- Automatic update of the docker images
+
+    You can enable them using :
+
+    > sudo owebui update-enable
+
+        > Started open-webui-postgresql-update timer
+        > Started open-webui-ollama-update timer
+        > Started open-webui-app-update timer
+
+    And check status using :
+
+    > sudo owebui update-status
+
+        > open-webui-postgresql : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+        > open-webui-ollama : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+        > open-webui-app : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+

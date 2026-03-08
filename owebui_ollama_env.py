@@ -5,6 +5,7 @@ if sys.argv[0].endswith('owebui_ollama_env_post'):
     pass
 
 elif sys.argv[0].endswith('owebui_ollama_env_pre'):
+    import os
     from owebui_tools import parse_files
 
     retf = sys.argv[-1]
@@ -24,6 +25,7 @@ elif sys.argv[0].endswith('owebui_ollama_env_pre'):
         else:
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG="%s:%s:11434"\n' % (data['OLLAMA_HOST'], data['OLLAMA_PORT']))
+    os.chmod(retf, 0o640)
 
 
 elif sys.argv[0].endswith('owebui_ollama_env_cond'):

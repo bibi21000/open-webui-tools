@@ -6,6 +6,7 @@ if sys.argv[0].endswith('owebui_app_env_post'):
 
 
 elif sys.argv[0].endswith('owebui_app_env_pre'):
+    import os
     import subprocess
     import shutil
     from owebui_tools import get_container_ip, parse_files
@@ -61,6 +62,7 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
         for ev in dockerenv:
             sdockerenv += f'-e {ev}={dockerenv[ev]} '
         f.write(f"OWEBUI_ENV={sdockerenv}\n")
+    os.chmod(retf, 0o640)
 
 
 elif sys.argv[0].endswith('owebui_app_env_cond'):

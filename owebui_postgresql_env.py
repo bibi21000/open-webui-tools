@@ -49,6 +49,7 @@ if sys.argv[0].endswith('owebui_postgresql_env_post'):
 
 
 elif sys.argv[0].endswith('owebui_postgresql_env_pre'):
+    import os
     from owebui_tools import parse_files
 
     retf = sys.argv[-1]
@@ -68,6 +69,7 @@ elif sys.argv[0].endswith('owebui_postgresql_env_pre'):
         else:
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG="%s:%s:5432"\n' % (data['POSTGRES_HOST'], data['POSTGRES_PORT']))
+    os.chmod(retf, 0o640)
 
 
 elif sys.argv[0].endswith('owebui_postgresql_env_cond'):

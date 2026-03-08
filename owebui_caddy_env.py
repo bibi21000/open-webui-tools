@@ -58,6 +58,7 @@ elif sys.argv[0].endswith('owebui_caddy_env_pre'):
             f.write("PORTMAP_CMD_SSL=-p\n")
             f.write('PORTMAP_ARG_SSL="%s:%s:443"\n' % (data['CADDY_HOST'], data['CADDY_PORT_SSL']))
             f.write('PORTMAP_ARG_UDP="%s:%s:443/udp"\n' % (data['CADDY_HOST'], data['CADDY_PORT_SSL']))
+    os.chmod(retf, 0o640)
 
     with open(os.path.join(data['OWEBUI_CADDY'], 'conf', 'Caddyfile'), 'w') as f:
         with open('/etc/open-webui/Caddyfile', "r") as t:

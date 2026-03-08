@@ -6,6 +6,7 @@ if sys.argv[0].endswith('owebui_samba_env_post'):
 
 
 elif sys.argv[0].endswith('owebui_samba_env_pre'):
+    import os
     from owebui_tools import parse_files
 
     retf = sys.argv[-1]
@@ -38,6 +39,7 @@ elif sys.argv[0].endswith('owebui_samba_env_pre'):
         else:
             f.write("PORTMAP_CMD_SSN=-p\n")
             f.write('PORTMAP_ARG_SSN="%s:%s:139"\n' % (data['SAMBA_HOST'], data['SAMBA_PORT_SSN']))
+    os.chmod(retf, 0o640)
 
 
 elif sys.argv[0].endswith('owebui_samba_env_cond'):

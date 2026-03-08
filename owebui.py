@@ -94,8 +94,8 @@ def update(force, models, restart, service):
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        print("Update %s for %s" % (srv[1], srv[0]))
         if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+            print("Update %s for %s" % (srv[1], srv[0]))
             data, _ = parse_files(['/etc/open-webui/%s.conf' % srv[0],
                       '/etc/default/open_webui',
                       '/etc/open-webui/open-webui-local.conf'], srv[0])
@@ -133,6 +133,64 @@ def ps():
         if 'owebui_' in line:
             print(line.strip())
 
+@cli.command()
+def update_status():
+    """Show open-webui update timers and services status"""
+    systemctl_cmd = shutil.which('systemctl')
+    for srv in SRVS:
+        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+
+            ps = subprocess.run([systemctl_cmd,'is-active', "%s-update.service"%srv[0]],
+                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            pt = subprocess.run([systemctl_cmd,'is-active', "%s-update.timer"%srv[0]],
+                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            pts = pt.stdout.split('\n')[0]
+            if pts == 'active':
+                pd = subprocess.run([systemctl_cmd,'status', '--no-pager', "%s-update.timer"%srv[0]],
+                        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                for line in pd.stdout.split('\n'):
+                    if 'Active: active' in line:
+                        last = " - Last run at %s" % line.split('since')[1].strip()
+                        break
+                else:
+                    last = " - Last run not founs"
+            else:
+                last = ""
+            print("%s : %s (%s)%s" %(srv[0], pts, ps.stdout.split('\n')[0], last))
+
+@cli.command()
+@click.argument('service', default=None, required=False, shell_complete=complete_servers)
+def update_enable(service):
+    """Enable open-webui update timers"""
+    systemctl_cmd = shutil.which('systemctl')
+    for srv in SRVS:
+        if service is not None and service != srv[0]:
+            continue
+        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+
+            p = subprocess.run([systemctl_cmd,'is-active', "%s-update.timer"%srv[0]],
+                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            if p.stdout.split('\n')[0] == 'inactive':
+                p = subprocess.run([systemctl_cmd,'start', "%s-update.timer"%srv[0]],
+                        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                print("Started %s-update timer" %(srv[0]))
+
+@cli.command()
+@click.argument('service', default=None, required=False, shell_complete=complete_servers)
+def update_disable(service):
+    """Disable open-webui update timers"""
+    systemctl_cmd = shutil.which('systemctl')
+    for srv in SRVS:
+        if service is not None and service != srv[0]:
+            continue
+        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+
+            p = subprocess.run([systemctl_cmd,'stop', "%s-update.timer"%srv[0]],
+                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            print("Stopped %s-update timer" %(srv[0]))
 
 if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
 
