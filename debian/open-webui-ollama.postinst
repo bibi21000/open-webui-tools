@@ -19,6 +19,10 @@ set -e
 case "$1" in
     configure)
         chmod u=rw,g=r,o= /etc/open-webui/open-webui-ollama.conf
+        if ! cat /etc/docker/daemon.json | grep nvidia-container-runtime >/dev/null 2>&1; then
+            nvidia-ctk runtime configure --runtime=docker
+            systemctl restart docker
+        fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

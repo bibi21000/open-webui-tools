@@ -16,7 +16,9 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
 
-- Installs dependency sources.
+- Install dependency package.
+
+    This will add the Docker and NVIDIA Container Toolkit APT sources.
 
     Must be installed separately before installing other packages.
 
@@ -95,7 +97,7 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     You can find more documentation here : https://caddyserver.com/docs/caddyfile
 
-    Downloag docker image and start service
+    Download docker image and start service
 
     > sudo owebui update --restart open-webui-caddy
 
