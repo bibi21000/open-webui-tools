@@ -50,7 +50,7 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     Environment Variable for OpenWeb UI : https://docs.openwebui.com/reference/env-configuration/
 
-    Environment Variable for OpenWeb UI : https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image
+    Environment Variable for Ollama : https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image
 
 
 - Update and start.

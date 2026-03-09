@@ -1,5 +1,5 @@
 [Unit]
-Description=Ollama Docker Container
+Description=Docling Docker Container
 # Only start after Docker is ready
 After=docker.service
 Requires=docker.service

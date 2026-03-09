@@ -43,7 +43,7 @@ def status():
 
             p = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            print("open-webui-%s : %s" %(srv[0], p.stdout.split('\n')[0]))
+            print("open-webui-%s : %s" %(srv[0], p.stdout.split('\n')[0]), flush=True)
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -58,11 +58,11 @@ def start(service):
             p = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            if p.stdout.split('\n')[0] == 'inactive':
+            if p.stdout.split('\n')[0] == 'inactive' or p.stdout.split('\n')[0] == 'failed':
                 p = subprocess.run([systemctl_cmd,'start', "open-webui-%s.service"%srv[0]],
                         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-                print("Started open-webui-%s" %(srv[0]))
+                print("Started open-webui-%s" %(srv[0]), flush=True)
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -77,7 +77,7 @@ def stop(service):
             p = subprocess.run([systemctl_cmd,'stop', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            print("Stopped open-webui-%s" %(srv[0]))
+            print("Stopped open-webui-%s" %(srv[0]), flush=True)
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -92,7 +92,7 @@ def restart(service):
             p = subprocess.run([systemctl_cmd,'restart', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            print("Restarted open-webui-%s" %(srv[0]))
+            print("Restarted open-webui-%s" %(srv[0]), flush=True)
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -103,7 +103,7 @@ def env(service):
         if service is not None and service != srv[0]:
             continue
         if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
-            print("Environment of open-webui-%s : " %(srv[0]))
+            print("Environment of open-webui-%s : " %(srv[0]), flush=True)
             p = subprocess.run([docker_cmd,'exec', '-it', srv[2], 'env'],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             if p.returncode != 0:
@@ -112,8 +112,8 @@ def env(service):
                         print('%s' % (err), file=sys.stderr)
             else:
                 for line in p.stdout.split('\n'):
-                    print('   ' + line.strip())
-            print()
+                    print('   ' + line.strip(), flush=True)
+            print(flush=True)
 
 @cli.command()
 @click.argument('service', shell_complete=complete_servers)
@@ -125,7 +125,7 @@ def exec(service, command):
         if service is not None and service != srv[0]:
             continue
         if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
-            print("Exec %s in open-webui-%s : " %(command, srv[0]))
+            print("Exec %s in open-webui-%s : " %(command, srv[0]), flush=True)
             p = subprocess.run([docker_cmd,'exec', '-it', srv[2]] + command.split(" "),
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             if p.returncode != 0:
@@ -134,7 +134,7 @@ def exec(service, command):
                         print('%s' % (err), file=sys.stderr)
             else:
                 for line in p.stdout.split('\n'):
-                    print('   ' + line.strip())
+                    print('   ' + line.strip(), flush=True)
 
 
 
@@ -149,7 +149,7 @@ def update(force, models, restart, service):
         if service is not None and service != srv[0]:
             continue
         if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
-            print("Update %s for open-webui-%s" % (srv[1], srv[0]))
+            print("Update %s for open-webui-%s" % (srv[1], srv[0]), flush=True)
             data, _ = parse_files(['/etc/open-webui/open-webui-%s.conf' % srv[0],
                       '/etc/default/open_webui',
                       '/etc/open-webui/open-webui-local.conf'], srv[0])
@@ -166,7 +166,7 @@ def update(force, models, restart, service):
             p = subprocess.run(cmd, text=True,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             for line in p.stdout.split('\n'):
-                print(line.strip())
+                print(line.strip(), flush=True)
 
             if p.returncode != 0:
                 for err in p.stderr.split('\n'):
@@ -174,9 +174,9 @@ def update(force, models, restart, service):
                         print('%s' % (err), file=sys.stderr)
 
             if models and srv[0] == 'open-webui-ollama':
-                print("Install ollama models")
+                print("Install ollama models", flush=True)
                 olama_check()
-                print()
+                print(flush=True)
 
 @cli.command()
 def ps():
@@ -187,7 +187,7 @@ def ps():
 
     for line in p.stdout.split('\n'):
         if 'owebui_' in line:
-            print(line.strip())
+            print(line.strip(), flush=True)
 
 @cli.command()
 def update_status():
@@ -212,7 +212,7 @@ def update_status():
                     last = " - Last run not founs"
             else:
                 last = ""
-            print("open-webui-%s : %s (%s)%s" %(srv[0], pts, ps.stdout.split('\n')[0], last))
+            print("open-webui-%s : %s (%s)%s" %(srv[0], pts, ps.stdout.split('\n')[0], last), flush=True)
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -231,7 +231,7 @@ def update_enable(service):
                 p = subprocess.run([systemctl_cmd,'start', "open-webui-%s-update.timer"%srv[0]],
                         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-                print("Started open-webui-%s-update timer" %(srv[0]))
+                print("Started open-webui-%s-update timer" %(srv[0]), flush=True)
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -246,7 +246,7 @@ def update_disable(service):
             p = subprocess.run([systemctl_cmd,'stop', "open-webui-%s-update.timer"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            print("Stopped open-webui-%s-update timer" %(srv[0]))
+            print("Stopped open-webui-%s-update timer" %(srv[0]), flush=True)
 
 if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
 
@@ -294,7 +294,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
                 if model in installed:
                     break
             else:
-                print("Install model %s" % (model))
+                print("Install model %s" % (model), flush=True)
                 p = subprocess.run([docker_cmd, 'exec', "-it", IMG, 'ollama', 'pull', model], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
                 if p.returncode != 0:
                     for err in p.stderr.split('\n'):
@@ -316,7 +316,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
         p = subprocess.run([docker_cmd, 'exec', "-it", IMG, 'ollama', 'pull', model], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
 
         for line in p.stdout.split('\n'):
-            print(line.strip())
+            print(line.strip(), flush=True)
 
         if p.returncode != 0:
             for err in p.stderr.split('\n'):
@@ -333,7 +333,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
         p = subprocess.run([docker_cmd, 'exec', "-it", IMG, 'ollama', 'rm', model], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
 
         for line in p.stdout.split('\n'):
-            print(line.strip())
+            print(line.strip(), flush=True)
 
         if p.returncode != 0:
             for err in p.stderr.split('\n'):
@@ -349,7 +349,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
         p = subprocess.run([docker_cmd, 'exec', "-it", IMG, 'ollama', 'show', model], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
 
         for line in p.stdout.split('\n'):
-            print(line.strip())
+            print(line.strip(), flush=True)
 
         if p.returncode != 0:
             for err in p.stderr.split('\n'):
@@ -365,7 +365,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
         p = subprocess.run([docker_cmd, 'exec', "-it", IMG, 'ollama', 'list'], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
 
         for line in p.stdout.split('\n'):
-            print(line.strip())
+            print(line.strip(), flush=True)
 
         if p.returncode != 0:
             for err in p.stderr.split('\n'):
@@ -381,7 +381,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
         p = subprocess.run([docker_cmd, 'exec', "-it", IMG, 'ollama', 'ps'], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
 
         for line in p.stdout.split('\n'):
-            print(line.strip())
+            print(line.strip(), flush=True)
 
         if p.returncode != 0:
             for err in p.stderr.split('\n'):

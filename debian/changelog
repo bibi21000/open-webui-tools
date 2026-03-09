@@ -1,9 +1,10 @@
-open-webui-tools (0.0.20-1) UNRELEASED; urgency=medium
+open-webui-tools (0.0.21-1) UNRELEASED; urgency=medium
 
   * Add docling
   * New upstream version
+  * New upstream version
 
- -- Sebastien GALLET <bibi21000@gmail.com>  Mon, 09 Mar 2026 13:52:01 +0100
+ -- Sebastien GALLET <bibi21000@gmail.com>  Mon, 09 Mar 2026 17:05:01 +0100
 
 open-webui-tools (0.0.19-1) UNRELEASED; urgency=medium
 
