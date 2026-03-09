@@ -22,7 +22,7 @@ Description: Autostart libvirt guests at boot with a delay.
 Package: open-webui-docker
 Architecture: all
 Depends: ${misc:Depends}, open-webui-common, ca-certificates, curl,
- gnupg2
+ gnupg2, jq
 Conflicts: docker.io, docker-compose, docker-compose-v2, docker-doc,
  podman-docker
 Description: Install docker and nvidia APT sources lists
@@ -58,6 +58,14 @@ Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
  nvidia-container-toolkit
 Description: Ollama docker stuff
  Download image of Ollama and install startup scripts.
+
+Package: open-webui-docling
+Architecture: all
+Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
+ containerd.io, docker-buildx-plugin, docker-compose-plugin,
+ nvidia-container-toolkit
+Description: Docling docker stuff
+ Download image of docling and install startup scripts.
 
 Package: open-webui
 Architecture: all

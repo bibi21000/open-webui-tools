@@ -1,0 +1,5 @@
+usr/lib/open-webui-tools/owebui_docling_env usr/lib/open-webui-tools/owebui_docling_env_pre
+usr/lib/open-webui-tools/owebui_docling_env usr/lib/open-webui-tools/owebui_docling_env_post
+usr/lib/open-webui-tools/owebui_docling_env usr/lib/open-webui-tools/owebui_docling_env_cond
+usr/lib/open-webui-tools/owebui_docling_env usr/lib/open-webui-tools/owebui_docling_env_upgrade
+usr/lib/open-webui-tools/owebui_docling_env usr/lib/open-webui-tools/owebui_docling_env_stop

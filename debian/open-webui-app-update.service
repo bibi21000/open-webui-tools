@@ -13,7 +13,7 @@ EnvironmentFile=/etc/open-webui/open-webui-app.conf
 EnvironmentFile=/etc/default/open_webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
-ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${OWEBUI_IMAGE} open-webui-app
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${OWEBUI_IMAGE} open-webui-app ${APP_IMAGE_LARGE}
 
 [Install]
 WantedBy=multi-user.target

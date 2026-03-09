@@ -59,3 +59,10 @@ override_dh_auto_install:
 	install -D -m 644 debian/open-webui-samba-update.timer debian/open-webui-samba/usr/lib/systemd/system/open-webui-samba-update.timer
 	dh_installsystemd -p open-webui-samba --no-enable --no-start --name=open-webui-samba-update open-webui-samba-update.service
 	dh_installsystemd -p open-webui-samba --no-enable --no-start --name=open-webui-samba-update open-webui-samba-update.timer
+
+	install -m 755 owebui_docling_env.py debian/open-webui-docling/usr/lib/open-webui-tools/owebui_docling_env
+	install -m 640 open-webui-docling.conf debian/open-webui-docling/etc/open-webui/open-webui-docling.conf
+	install -D -m 644 debian/open-webui-docling-update.service debian/open-webui-docling/usr/lib/systemd/system/open-webui-docling-update.service
+	install -D -m 644 debian/open-webui-docling-update.timer debian/open-webui-docling/usr/lib/systemd/system/open-webui-docling-update.timer
+	dh_installsystemd -p open-webui-docling --no-enable --no-start --name=open-webui-docling-update open-webui-docling-update.service
+	dh_installsystemd -p open-webui-docling --no-enable --no-start --name=open-webui-docling-update open-webui-docling-update.timer

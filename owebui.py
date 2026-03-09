@@ -7,18 +7,28 @@ import click
 from owebui_tools import parse_files
 
 
-SRVS = [ ('open-webui-postgresql', 'POSTGRES_IMAGE'),
-          ('open-webui-ollama', 'OLLAMA_IMAGE'),
-          ('open-webui-app', 'OWEBUI_IMAGE'),
-          ('open-webui-caddy', 'CADDY_IMAGE'),
-          ('open-webui-samba', 'SAMBA_IMAGE'),
+SRVS = [ ('postgresql', 'POSTGRES_IMAGE', 'owebui_postgresql'),
+          ('ollama', 'OLLAMA_IMAGE', 'owebui_ollama'),
+          ('app', 'OWEBUI_IMAGE', 'owebui_app'),
+          ('caddy', 'CADDY_IMAGE', 'owebui_caddy'),
+          ('samba', 'SAMBA_IMAGE', 'owebui_samba'),
+          ('docling', 'DOCLING_IMAGE', 'owebui_docling'),
         ]
 
 def complete_servers(ctx, param, incomplete):
     if incomplete == "":
-        return [' '] + [srv[0] for srv in SRVS if srv[0].startswith(incomplete) and os.path.exists('/etc/open-webui/%s.conf' % srv[0]) is True]
+        return [' '] + [srv[0] for srv in SRVS if srv[0].startswith(incomplete) and os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]) is True]
     else:
-        return [srv[0] for srv in SRVS if srv[0].startswith(incomplete) and os.path.exists('/etc/open-webui/%s.conf' % srv[0]) is True]
+        return [srv[0] for srv in SRVS if srv[0].startswith(incomplete) and os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]) is True]
+
+def complete_update(ctx, param, incomplete):
+    opts = ['--force', '--models', '--restart']
+    if incomplete == "":
+        return opts + [' '] + [srv[0] for srv in SRVS if srv[0].startswith(incomplete) and os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]) is True]
+    elif incomplete.startswith('-'):
+        return [opt for opt in opts if opt.startswith(incomplete) and opt not in incomplete]
+    else:
+        return [srv[0] for srv in SRVS if srv[0].startswith(incomplete) and os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]) is True]
 
 @click.group()
 def cli():
@@ -29,11 +39,11 @@ def status():
     """Show open-webui services status"""
     systemctl_cmd = shutil.which('systemctl')
     for srv in SRVS:
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            p = subprocess.run([systemctl_cmd,'is-active', "%s.service"%srv[0]],
+            p = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            print("%s : %s" %(srv[0], p.stdout.split('\n')[0]))
+            print("open-webui-%s : %s" %(srv[0], p.stdout.split('\n')[0]))
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -43,16 +53,16 @@ def start(service):
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            p = subprocess.run([systemctl_cmd,'is-active', "%s.service"%srv[0]],
+            p = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             if p.stdout.split('\n')[0] == 'inactive':
-                p = subprocess.run([systemctl_cmd,'start', "%s.service"%srv[0]],
+                p = subprocess.run([systemctl_cmd,'start', "open-webui-%s.service"%srv[0]],
                         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-                print("Started %s" %(srv[0]))
+                print("Started open-webui-%s" %(srv[0]))
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -62,12 +72,12 @@ def stop(service):
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            p = subprocess.run([systemctl_cmd,'stop', "%s.service"%srv[0]],
+            p = subprocess.run([systemctl_cmd,'stop', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            print("Stopped %s" %(srv[0]))
+            print("Stopped open-webui-%s" %(srv[0]))
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -77,26 +87,70 @@ def restart(service):
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            p = subprocess.run([systemctl_cmd,'restart', "%s.service"%srv[0]],
+            p = subprocess.run([systemctl_cmd,'restart', "open-webui-%s.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            print("Restarted %s" %(srv[0]))
+            print("Restarted open-webui-%s" %(srv[0]))
+
+@cli.command()
+@click.argument('service', default=None, required=False, shell_complete=complete_servers)
+def env(service):
+    """Get env of open-webui services"""
+    docker_cmd = shutil.which('docker')
+    for srv in SRVS:
+        if service is not None and service != srv[0]:
+            continue
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
+            print("Environment of open-webui-%s : " %(srv[0]))
+            p = subprocess.run([docker_cmd,'exec', '-it', srv[2], 'env'],
+                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if p.returncode != 0:
+                for err in p.stderr.split('\n'):
+                    if err != '':
+                        print('%s' % (err), file=sys.stderr)
+            else:
+                for line in p.stdout.split('\n'):
+                    print('   ' + line.strip())
+            print()
+
+@cli.command()
+@click.argument('service', shell_complete=complete_servers)
+@click.argument('command')
+def exec(service, command):
+    """Exec command in open-webui service"""
+    docker_cmd = shutil.which('docker')
+    for srv in SRVS:
+        if service is not None and service != srv[0]:
+            continue
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
+            print("Exec %s in open-webui-%s : " %(command, srv[0]))
+            p = subprocess.run([docker_cmd,'exec', '-it', srv[2]] + command.split(" "),
+                    text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if p.returncode != 0:
+                for err in p.stderr.split('\n'):
+                    if err != '':
+                        print('%s' % (err), file=sys.stderr)
+            else:
+                for line in p.stdout.split('\n'):
+                    print('   ' + line.strip())
+
+
 
 @cli.command()
 @click.option('--force', is_flag=True, help="Force update of the image")
 @click.option('--models', is_flag=True, help="Also update ollama models")
 @click.option('--restart', is_flag=True, help="Start or restart services after update")
-@click.argument('service', default=None, required=False, shell_complete=complete_servers)
+@click.argument('service', default=None, required=False, shell_complete=complete_update)
 def update(force, models, restart, service):
     """Update docker images"""
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
-            print("Update %s for %s" % (srv[1], srv[0]))
-            data, _ = parse_files(['/etc/open-webui/%s.conf' % srv[0],
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
+            print("Update %s for open-webui-%s" % (srv[1], srv[0]))
+            data, _ = parse_files(['/etc/open-webui/open-webui-%s.conf' % srv[0],
                       '/etc/default/open_webui',
                       '/etc/open-webui/open-webui-local.conf'], srv[0])
             cmd = ["/usr/lib/open-webui-tools/owebui_docker_update",
@@ -107,6 +161,8 @@ def update(force, models, restart, service):
                 cmd.append('--force')
             if restart:
                 cmd.append('--restart')
+            if srv[1] + '_LARGE' in data:
+                cmd.append(data[srv[1] + '_LARGE'])
             p = subprocess.run(cmd, text=True,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             for line in p.stdout.split('\n'):
@@ -138,15 +194,15 @@ def update_status():
     """Show open-webui update timers and services status"""
     systemctl_cmd = shutil.which('systemctl')
     for srv in SRVS:
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            ps = subprocess.run([systemctl_cmd,'is-active', "%s-update.service"%srv[0]],
+            ps = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s-update.service"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            pt = subprocess.run([systemctl_cmd,'is-active', "%s-update.timer"%srv[0]],
+            pt = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s-update.timer"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             pts = pt.stdout.split('\n')[0]
             if pts == 'active':
-                pd = subprocess.run([systemctl_cmd,'status', '--no-pager', "%s-update.timer"%srv[0]],
+                pd = subprocess.run([systemctl_cmd,'status', '--no-pager', "open-webui-%s-update.timer"%srv[0]],
                         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 for line in pd.stdout.split('\n'):
                     if 'Active: active' in line:
@@ -156,7 +212,7 @@ def update_status():
                     last = " - Last run not founs"
             else:
                 last = ""
-            print("%s : %s (%s)%s" %(srv[0], pts, ps.stdout.split('\n')[0], last))
+            print("open-webui-%s : %s (%s)%s" %(srv[0], pts, ps.stdout.split('\n')[0], last))
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -166,16 +222,16 @@ def update_enable(service):
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            p = subprocess.run([systemctl_cmd,'is-active', "%s-update.timer"%srv[0]],
+            p = subprocess.run([systemctl_cmd,'is-active', "open-webui-%s-update.timer"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             if p.stdout.split('\n')[0] == 'inactive':
-                p = subprocess.run([systemctl_cmd,'start', "%s-update.timer"%srv[0]],
+                p = subprocess.run([systemctl_cmd,'start', "open-webui-%s-update.timer"%srv[0]],
                         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-                print("Started %s-update timer" %(srv[0]))
+                print("Started open-webui-%s-update timer" %(srv[0]))
 
 @cli.command()
 @click.argument('service', default=None, required=False, shell_complete=complete_servers)
@@ -185,12 +241,12 @@ def update_disable(service):
     for srv in SRVS:
         if service is not None and service != srv[0]:
             continue
-        if os.path.exists('/etc/open-webui/%s.conf' % srv[0]):
+        if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
 
-            p = subprocess.run([systemctl_cmd,'stop', "%s-update.timer"%srv[0]],
+            p = subprocess.run([systemctl_cmd,'stop', "open-webui-%s-update.timer"%srv[0]],
                     text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            print("Stopped %s-update timer" %(srv[0]))
+            print("Stopped open-webui-%s-update timer" %(srv[0]))
 
 if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
 

@@ -9,7 +9,7 @@ if sys.argv[0].endswith('owebui_postgresql_env_post'):
     from owebui_tools import parse_files
 
     retf = sys.argv[-1]
-    data, dockerenv = parse_files(sys.argv[1:-1], "ollama")
+    data, dockerenv = parse_files(sys.argv[1:-1], "postgresql")
 
     env = os.environ.copy()
     env["PGPASSWORD"] = data['POSTGRES_PASSWORD']
@@ -53,7 +53,7 @@ elif sys.argv[0].endswith('owebui_postgresql_env_pre'):
     from owebui_tools import parse_files
 
     retf = sys.argv[-1]
-    data, dockerenv = parse_files(sys.argv[1:-1], "ollama")
+    data, dockerenv = parse_files(sys.argv[1:-1], "postgresql")
 
     with open(retf, 'w') as f:
         if ("POSTGRES_HOST" not in data or data['POSTGRES_HOST'] == "") and \
@@ -69,7 +69,11 @@ elif sys.argv[0].endswith('owebui_postgresql_env_pre'):
         else:
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG="%s:%s:5432"\n' % (data['POSTGRES_HOST'], data['POSTGRES_PORT']))
-    os.chmod(retf, 0o640)
+        sdockerenv = f""
+        for ev in dockerenv:
+            sdockerenv += f'-e {ev}={dockerenv[ev]} '
+        f.write(f"POSTGRES_ENV={sdockerenv}\n")
+        os.chmod(retf, 0o640)
 
 
 elif sys.argv[0].endswith('owebui_postgresql_env_cond'):
@@ -86,3 +90,16 @@ elif sys.argv[0].endswith('owebui_postgresql_env_cond'):
     if p.returncode != 0:
         print("Can't find docker image %s. Delayed start" % (data['POSTGRES_IMAGE']), file=sys.stderr)
         sys.exit(1)
+
+
+elif sys.argv[0].endswith('owebui_postgresql_env_stop'):
+    import os
+    from owebui_tools import parse_files
+
+    retf = sys.argv[-1]
+    data, _ = parse_files(sys.argv[1:-1], "postgresql")
+
+    if 'POSTGRES_DEBUG' not in data or data['POSTGRES_DEBUG'] != 'true':
+        retf = sys.argv[-1]
+        if os.path.exists(retf):
+            os.remove(retf)

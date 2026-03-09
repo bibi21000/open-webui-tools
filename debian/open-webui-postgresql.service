@@ -37,6 +37,12 @@ ExecStartPost=/usr/lib/open-webui-tools/owebui_postgresql_env_post \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
 
+ExecStopPost=/usr/lib/open-webui-tools/owebui_postgresql_env_stop \
+    /etc/open-webui/open-webui-postgresql.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-postgresql.conf
+
 # Start the container in the foreground (no -d flag)
 ExecStart=/usr/bin/docker run \
   --name owebui_postgresql \
@@ -46,6 +52,7 @@ ExecStart=/usr/bin/docker run \
   -e POSTGRES_DB=${POSTGRES_DB} \
   $PORTMAP_CMD $PORTMAP_ARG \
   -v ${OWEBUI_POSTGRESQL}:/var/lib/postgresql/18/docker \
+  $POSTGRES_ENV \
   ${POSTGRES_IMAGE}
 
 # Gracefully stop the container

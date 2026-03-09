@@ -2,3 +2,4 @@ usr/lib/open-webui-tools/owebui_app_env usr/lib/open-webui-tools/owebui_app_env_
 usr/lib/open-webui-tools/owebui_app_env usr/lib/open-webui-tools/owebui_app_env_post
 usr/lib/open-webui-tools/owebui_app_env usr/lib/open-webui-tools/owebui_app_env_cond
 usr/lib/open-webui-tools/owebui_app_env usr/lib/open-webui-tools/owebui_app_env_upgrade
+usr/lib/open-webui-tools/owebui_app_env usr/lib/open-webui-tools/owebui_app_env_stop

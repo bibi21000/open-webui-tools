@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-VERSION:=0.0.19
+VERSION:=0.0.20
 DEBVERSION:=1
 ifndef DIST
 	DIST=jammy

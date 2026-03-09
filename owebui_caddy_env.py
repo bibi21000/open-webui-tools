@@ -58,6 +58,10 @@ elif sys.argv[0].endswith('owebui_caddy_env_pre'):
             f.write("PORTMAP_CMD_SSL=-p\n")
             f.write('PORTMAP_ARG_SSL="%s:%s:443"\n' % (data['CADDY_HOST'], data['CADDY_PORT_SSL']))
             f.write('PORTMAP_ARG_UDP="%s:%s:443/udp"\n' % (data['CADDY_HOST'], data['CADDY_PORT_SSL']))
+        sdockerenv = f""
+        for ev in dockerenv:
+            sdockerenv += f'-e {ev}={dockerenv[ev]} '
+        f.write(f"CADDY_ENV={sdockerenv}\n")
     os.chmod(retf, 0o640)
 
     with open(os.path.join(data['OWEBUI_CADDY'], 'conf', 'Caddyfile'), 'w') as f:
@@ -81,3 +85,15 @@ elif sys.argv[0].endswith('owebui_caddy_env_cond'):
         print("Can't find docker image %s. Delayed start" % (data['CADDY_IMAGE']), file=sys.stderr)
         sys.exit(1)
 
+
+elif sys.argv[0].endswith('owebui_caddy_env_stop'):
+    import os
+    from owebui_tools import parse_files
+
+    retf = sys.argv[-1]
+    data, _ = parse_files(sys.argv[1:-1], "caddy")
+
+    if 'CADDY_DEBUG' not in data or data['CADDY_DEBUG'] != 'true':
+        retf = sys.argv[-1]
+        if os.path.exists(retf):
+            os.remove(retf)

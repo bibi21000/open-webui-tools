@@ -2,3 +2,4 @@ usr/lib/open-webui-tools/owebui_samba_env usr/lib/open-webui-tools/owebui_samba_
 usr/lib/open-webui-tools/owebui_samba_env usr/lib/open-webui-tools/owebui_samba_env_post
 usr/lib/open-webui-tools/owebui_samba_env usr/lib/open-webui-tools/owebui_samba_env_cond
 usr/lib/open-webui-tools/owebui_samba_env usr/lib/open-webui-tools/owebui_samba_env_upgrade
+usr/lib/open-webui-tools/owebui_samba_env usr/lib/open-webui-tools/owebui_samba_env_stop

@@ -1,5 +1,5 @@
 [Unit]
-Description=Update Samba Docker Container
+Description=Update Docling Docker Container
 # Only start after Docker is ready
 After=docker.service
 Requires=docker.service
@@ -9,11 +9,11 @@ After=network-online.target
 [Service]
 Type=oneshot
 
-EnvironmentFile=/etc/open-webui/open-webui-samba.conf
+EnvironmentFile=/etc/open-webui/open-webui-docling.conf
 EnvironmentFile=/etc/default/open_webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
-ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${SAMBA_IMAGE} open-webui-samba ${SAMBA_IMAGE_LARGE}
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${DOCLING_IMAGE} open-webui-docling  ${DOCLING_IMAGE_LARGE}
 
 [Install]
 WantedBy=multi-user.target

@@ -61,6 +61,26 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
             sdockerenv += f"-e {docker_pgv} "
         for ev in dockerenv:
             sdockerenv += f'-e {ev}={dockerenv[ev]} '
+        if os.path.exists('/etc/open-webui/open-webui-docling.conf'):
+            sdockerenv += "-e CONTENT_EXTRACTION_ENGINE=docling "
+            if ("DOCLING_HOST" not in data or data['DOCLING_HOST'] == "" or data['DOCLING_HOST'] == "127.0.0.1"):
+                dlip = get_container_ip("owebui_docling", docker_cmd=docker_cmd, time_out=10)
+                dlport = 5001
+            else:
+                dlip = data['DOCLING_HOST']
+                if ("DOCLING_PORT" not in data or data['DOCLING_PORT'] == ""):
+                    dlport = 5001
+                else:
+                    dlport = data['DOCLING_PORT']
+            sdockerenv += f'-e DOCLING_SERVER_URL={dlip}:{dlport} '
+            if 'DOCLING_PARAMS' not in data or data['DOCLING_PARAMS'] == "":
+                if 'DOCLING_IMAGE_LANGS' in data and data['DOCLING_IMAGE_LANGS'] != "":
+                    langs = data['DOCLING_IMAGE_LANGS']
+                else:
+                    langs = "eng"
+                sdockerenv += '''-e DOCLING_PARAMS='{"do_ocr": true, "ocr_engine": "tesseract", "ocr_lang": "%s"}' ''' % langs
+            else:
+                sdockerenv += f'-e DOCLING_PARAMS={data['DOCLING_PARAMS']} '
         f.write(f"OWEBUI_ENV={sdockerenv}\n")
     os.chmod(retf, 0o640)
 
@@ -89,7 +109,9 @@ elif sys.argv[0].endswith('owebui_app_env_upgrade'):
     data, _ = parse_files(['/etc/open-webui/open-webui-app.conf',
             '/etc/default/open_webui',
             '/etc/open-webui/open-webui-local.conf'], "app")
-    if 'OWEBUI_IMAGE_SRC' not in data or 'OWEBUI_IMAGE_PKGS' not in data:
+    if 'OWEBUI_IMAGE_SRC' not in data \
+      or 'OWEBUI_IMAGE_PKGS' not in data \
+      or data['OWEBUI_IMAGE_PKGS'] == "" :
         sys.exit(0)
 
     image_id = sys.argv[1]
@@ -124,3 +146,16 @@ elif sys.argv[0].endswith('owebui_app_env_upgrade'):
         sys.exit(2)
 
     p = subprocess.run([docker_cmd, 'rm', "owebui_app_upgrade"], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+elif sys.argv[0].endswith('owebui_app_env_stop'):
+    import os
+    from owebui_tools import parse_files
+
+    retf = sys.argv[-1]
+    data, _ = parse_files(sys.argv[1:-1], "app")
+
+    if 'OWEBUI_DEBUG' not in data or data['OWEBUI_DEBUG'] != 'true':
+        retf = sys.argv[-1]
+        if os.path.exists(retf):
+            os.remove(retf)

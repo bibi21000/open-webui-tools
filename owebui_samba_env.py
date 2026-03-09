@@ -39,6 +39,10 @@ elif sys.argv[0].endswith('owebui_samba_env_pre'):
         else:
             f.write("PORTMAP_CMD_SSN=-p\n")
             f.write('PORTMAP_ARG_SSN="%s:%s:139"\n' % (data['SAMBA_HOST'], data['SAMBA_PORT_SSN']))
+        sdockerenv = f""
+        for ev in dockerenv:
+            sdockerenv += f'-e {ev}={dockerenv[ev]} '
+        f.write(f"SAMBA_ENV={sdockerenv}\n")
     os.chmod(retf, 0o640)
 
 
@@ -57,3 +61,15 @@ elif sys.argv[0].endswith('owebui_samba_env_cond'):
         print("Can't find docker image %s. Delayed start" % (data['SAMBA_IMAGE']), file=sys.stderr)
         sys.exit(1)
 
+
+elif sys.argv[0].endswith('owebui_samba_env_stop'):
+    import os
+    from owebui_tools import parse_files
+
+    retf = sys.argv[-1]
+    data, _ = parse_files(sys.argv[1:-1], "samba")
+
+    if 'SAMBA_DEBUG' not in data or data['SAMBA_DEBUG'] != 'true':
+        retf = sys.argv[-1]
+        if os.path.exists(retf):
+            os.remove(retf)

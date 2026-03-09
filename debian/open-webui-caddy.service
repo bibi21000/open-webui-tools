@@ -42,6 +42,12 @@ ExecStartPost=/usr/lib/open-webui-tools/owebui_caddy_env_post \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-caddy.conf
 
+ExecStopPost=/usr/lib/open-webui-tools/owebui_caddy_env_stop \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/default/open_webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-caddy.conf
+
 # Start the container in the foreground (no -d flag)
 ExecStart=/usr/bin/docker run \
   --name owebui_caddy \
@@ -51,6 +57,7 @@ ExecStart=/usr/bin/docker run \
   $PORTMAP_CMD_SSL $PORTMAP_ARG_UDP \
   -v ${OWEBUI_CADDY}/www:/data \
   -v ${OWEBUI_CADDY}/conf:/etc/caddy \
+  $CADDY_ENV \
   ${CADDY_IMAGE}
 
 # Gracefully stop the container

@@ -3,6 +3,8 @@
 This tutorial will guide you through installing Open WebUI connected to a
 PostgreSQL database (with the "vector" extension) and an Olama server.
 
+He also explains how to install caddy and docling
+
 It uses Docker images and stores data on disk in separate directories within /var/lib/owebui.
 
 
@@ -87,28 +89,6 @@ It uses Docker images and stores data on disk in separate directories within /va
 
    You can now connect to http://127.0.0.1:8080
 
-- If you plan to connect from outside, it is recommended to use a frontend like Caddy.
-
-    > sudo apt install open-webui-caddy
-
-    Update the Caddyfile in /etc/open-webui. {APP_IP} and {APP_PORT} will
-    be replaced with the appropriate values ​​when the service starts.
-
-    You can find more documentation here : https://caddyserver.com/docs/caddyfile
-
-    Download docker image and start service
-
-    > sudo owebui update --restart open-webui-caddy
-
-    Check status
-
-    > sudo owebui status
-
-        > open-webui-postgresql : active
-        > open-webui-ollama : active
-        > open-webui-app : active
-        > open-webui-caddy : active
-
 - Automatic update of the docker images
 
     You can enable them using :
@@ -127,3 +107,48 @@ It uses Docker images and stores data on disk in separate directories within /va
         > open-webui-ollama : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
         > open-webui-app : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
 
+- If you plan to connect from outside, it is recommended to use a frontend like Caddy.
+
+    > sudo apt install open-webui-caddy
+
+    Update the Caddyfile in /etc/open-webui. {APP_IP} and {APP_PORT} will
+    be replaced with the appropriate values ​​when the service starts.
+
+    You can find more documentation here : https://caddyserver.com/docs/caddyfile
+
+    Download docker image and start service
+
+    > sudo owebui update --restart caddy
+
+    Check status
+
+    > sudo owebui status
+
+        > open-webui-postgresql : active
+        > open-webui-ollama : active
+        > open-webui-app : active
+        > open-webui-caddy : active
+
+- If you plan to do OCR, it is possible to install Docling.
+
+    > sudo apt install open-webui-docling
+
+    Add your langs to DOCLING_IMAGE_LANGS (check configuration file) to dowload
+    image and files needed for tesseract and update your local image.
+    This will create a basic DOCLING_PARAMS environment variable. You can
+    define more complex defining app_DOCLING_PARAMS yourself.
+
+    > sudo owebui update --force --restart docling
+
+    Restart Open WebUI app
+
+    > sudo owebui restart app
+
+    Check status
+
+    > sudo owebui status
+
+        > open-webui-postgresql : active
+        > open-webui-ollama : active
+        > open-webui-app : active
+        > open-webui-docling : active
