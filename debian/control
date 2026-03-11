@@ -15,9 +15,8 @@ Package: open-webui-common
 Architecture: all
 Depends: ${misc:Depends}, python3-click, python3-requests,
  python3-venv, python3-setuptools, python3-wheel, python3:any
-Description: Autostart libvirt guests at boot with a delay.
- Python code and a systemd unit that launch the guests
- after the delays specified in the configuration file.
+Description: Common files for open-webui
+ The common files used by other packages.
 
 Package: open-webui-docker
 Architecture: all
@@ -42,7 +41,7 @@ Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
  containerd.io, docker-buildx-plugin, docker-compose-plugin,
  postgresql-client
 Description: Postgresql docker stuff
- Download image of Postgresql and install startup scripts.
+ Download image of Postgresql (with vector extension) and install startup scripts.
 
 Package: open-webui-samba
 Architecture: all
@@ -85,4 +84,11 @@ Architecture: all
 Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
  containerd.io, docker-buildx-plugin, docker-compose-plugin
 Description: Caddy docker stuff
- Download image of Caddy and install startup scripts.
+ Download image of Caddy (http/https frontend) and install startup scripts.
+
+Package: open-webui-glances
+Architecture: all
+Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
+ containerd.io, docker-buildx-plugin, docker-compose-plugin
+Description: Glances docker stuff
+ Glances allows you to remotely monitor system resources of host

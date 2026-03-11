@@ -17,15 +17,15 @@ case "$1" in
         # If the package has default file it could be sourced, so that
         # the local admin can overwrite the defaults
 
-        [ -f "/etc/default/open_webui" ] && . /etc/default/open_webui
+        [ -f "/etc/default/open-webui" ] && . /etc/default/open-webui
 
         # Sane defaults:
 
         [ -z "$OWEBUI_USER" ] && OWEBUI_USER=owebui
         [ -z "$OWEBUI_GROUP" ] && OWEBUI_GROUP=owebui
-        [ -z "$OWEBUI_DATA" ] && OWEBUI_DATA=/var/lib/owebui/data
+        [ -z "$OWEBUI_DATA" ] && OWEBUI_DATA=/var/lib/owebui/app
 
-        test -d $OWEBUI_DATA || mkdir $OWEBUI_DATA
+        test -d $OWEBUI_DATA || mkdir -p $OWEBUI_DATA
         if ! dpkg-statoverride --list $OWEBUI_DATA >/dev/null
         then
           #~ chown -R $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_DATA

@@ -13,6 +13,7 @@ SRVS = [ ('postgresql', 'POSTGRES_IMAGE', 'owebui_postgresql'),
           ('caddy', 'CADDY_IMAGE', 'owebui_caddy'),
           ('samba', 'SAMBA_IMAGE', 'owebui_samba'),
           ('docling', 'DOCLING_IMAGE', 'owebui_docling'),
+          ('glances', 'GLANCES_IMAGE', 'owebui_glances'),
         ]
 
 def complete_servers(ctx, param, incomplete):
@@ -151,7 +152,7 @@ def update(force, models, restart, service):
         if os.path.exists('/etc/open-webui/open-webui-%s.conf' % srv[0]):
             print("Update %s for open-webui-%s" % (srv[1], srv[0]), flush=True)
             data, _ = parse_files(['/etc/open-webui/open-webui-%s.conf' % srv[0],
-                      '/etc/default/open_webui',
+                      '/etc/default/open-webui',
                       '/etc/open-webui/open-webui-local.conf'], srv[0])
             cmd = ["/usr/lib/open-webui-tools/owebui_docker_update",
                     data[srv[1]], srv[0]]
@@ -173,7 +174,7 @@ def update(force, models, restart, service):
                     if err != '':
                         print('%s' % (err), file=sys.stderr)
 
-            if models and srv[0] == 'open-webui-ollama':
+            if models and srv[0] == 'ollama':
                 print("Install ollama models", flush=True)
                 olama_check()
                 print(flush=True)
@@ -262,7 +263,7 @@ if os.path.exists('/etc/open-webui/open-webui-ollama.conf'):
             from owebui_tools import parse_files
 
             data, _ = parse_files(['/etc/open-webui/open-webui-ollama.conf',
-                    '/etc/default/open_webui',
+                    '/etc/default/open-webui',
                     '/etc/open-webui/open-webui-local.conf'], "ollama")
             if 'OLLAMA_MODELS' in data:
                 models = data['OLLAMA_MODELS']

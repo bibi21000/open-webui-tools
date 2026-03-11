@@ -10,10 +10,10 @@ After=network-online.target
 Type=oneshot
 
 EnvironmentFile=/etc/open-webui/open-webui-app.conf
-EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
-ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${OWEBUI_IMAGE} open-webui-app ${APP_IMAGE_LARGE}
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${OWEBUI_IMAGE} app ${APP_IMAGE_LARGE}
 
 [Install]
 WantedBy=multi-user.target

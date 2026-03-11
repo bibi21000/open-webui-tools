@@ -6,9 +6,6 @@ After=open-webui-ollama.service
 After=open-webui-postgresql.service
 After=open-webui-docling.service
 Requires=docker.service
-Requires=open-webui-ollama.service
-Requires=open-webui-postgresql.service
-Requires=open-webui-docling.service
 # Wait for network to be available
 After=network-online.target
 
@@ -17,7 +14,7 @@ Type=simple
 
 # Environment files
 EnvironmentFile=/etc/open-webui/open-webui-app.conf
-EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 EnvironmentFile=-/run/open-webui/open-webui-app.conf
 
@@ -27,7 +24,7 @@ ExecStartPre=-/usr/bin/docker rm -f owebui_app
 ExecStartPre=/usr/lib/open-webui-tools/owebui_app_env_cond \
     /etc/open-webui/open-webui-app.conf \
     /etc/open-webui/open-webui-local.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /run/open-webui/open-webui-app.conf
 # Generate dynamic environment file
 ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
@@ -36,15 +33,16 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_app_env_pre \
     /etc/open-webui/open-webui-postgresql.conf \
     /etc/open-webui/open-webui-docling.conf \
     /etc/open-webui/open-webui-app.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-app.conf
 
 ExecStopPost=/usr/lib/open-webui-tools/owebui_app_env_stop \
     /etc/open-webui/open-webui-app.conf \
     /etc/open-webui/open-webui-local.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /run/open-webui/open-webui-app.conf
+ExecStopPost=-/usr/bin/docker rm -f owebui_app
 
 # Start the container in the foreground (no -d flag)
 ExecStart=/usr/bin/docker run \

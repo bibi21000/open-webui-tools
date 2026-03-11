@@ -11,7 +11,7 @@ Type=simple
 
 # Environment files
 EnvironmentFile=/etc/open-webui/open-webui-docling.conf
-EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 EnvironmentFile=-/run/open-webui/open-webui-docling.conf
 
@@ -20,22 +20,23 @@ ExecStartPre=-/usr/bin/docker rm -f owebui_docling
 # Check if Docker image is available
 ExecStartPre=/usr/lib/open-webui-tools/owebui_docling_env_cond \
     /etc/open-webui/open-webui-docling.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-docling.conf
 # Generate dynamic environment file
 ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
 ExecStartPre=/usr/lib/open-webui-tools/owebui_docling_env_pre \
     /etc/open-webui/open-webui-docling.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-docling.conf
 
 ExecStopPost=/usr/lib/open-webui-tools/owebui_docling_env_stop \
     /etc/open-webui/open-webui-docling.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-docling.conf
+ExecStopPost=-/usr/bin/docker rm -f owebui_docling
 
 # Start the container in the foreground (no -d flag)
 ExecStart=/usr/bin/docker run \

@@ -10,10 +10,10 @@ After=network-online.target
 Type=oneshot
 
 EnvironmentFile=/etc/open-webui/open-webui-samba.conf
-EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
-ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${SAMBA_IMAGE} open-webui-samba ${SAMBA_IMAGE_LARGE}
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${SAMBA_IMAGE} samba ${SAMBA_IMAGE_LARGE}
 
 [Install]
 WantedBy=multi-user.target

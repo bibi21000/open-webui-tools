@@ -18,7 +18,7 @@ case "$1" in
         # If the package has default file it could be sourced, so that
         # the local admin can overwrite the defaults
 
-        [ -f "/etc/default/open_webui" ] && . /etc/default/open_webui
+        [ -f "/etc/default/open-webui" ] && . /etc/default/open-webui
 
         # Sane defaults:
 
@@ -26,7 +26,7 @@ case "$1" in
         [ -z "$OWEBUI_GROUP" ] && OWEBUI_GROUP=owebui
         [ -z "$OWEBUI_POSTGRESQL" ] && OWEBUI_POSTGRESQL=/var/lib/owebui/postgresql
 
-        test -d $OWEBUI_POSTGRESQL || mkdir $OWEBUI_POSTGRESQL
+        test -d $OWEBUI_POSTGRESQL || mkdir -p $OWEBUI_POSTGRESQL
         if ! dpkg-statoverride --list $OWEBUI_POSTGRESQL >/dev/null
         then
           #~ chown -R $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_POSTGRESQL

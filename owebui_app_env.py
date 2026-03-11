@@ -107,7 +107,7 @@ elif sys.argv[0].endswith('owebui_app_env_upgrade'):
     from owebui_tools import parse_files
 
     data, _ = parse_files(['/etc/open-webui/open-webui-app.conf',
-            '/etc/default/open_webui',
+            '/etc/default/open-webui',
             '/etc/open-webui/open-webui-local.conf'], "app")
     if 'OWEBUI_IMAGE_SRC' not in data \
       or 'OWEBUI_IMAGE_PKGS' not in data \

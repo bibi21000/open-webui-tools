@@ -10,10 +10,10 @@ After=network-online.target
 Type=oneshot
 
 EnvironmentFile=/etc/open-webui/open-webui-docling.conf
-EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
-ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${DOCLING_IMAGE} open-webui-docling  ${DOCLING_IMAGE_LARGE}
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${DOCLING_IMAGE} docling  ${DOCLING_IMAGE_LARGE}
 
 [Install]
 WantedBy=multi-user.target

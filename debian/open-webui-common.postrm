@@ -22,7 +22,7 @@ case "$1" in
     ;;
 
     purge)
-        [ -f "/etc/default/open_webui" ] && . /etc/default/open_webui
+        [ -f "/etc/default/open-webui" ] && . /etc/default/open-webui
 
         [ -z "$OWEBUI_USER" ] && OWEBUI_USER=owebui
         [ -z "$OWEBUI_GROUP" ] && OWEBUI_GROUP=owebui
@@ -31,6 +31,7 @@ case "$1" in
         deluser --quiet --system $OWEBUI_USER > /dev/null || true
         delgroup --quiet --system $OWEBUI_GROUP > /dev/null || true
         rm -rf $OWEBUI_HOME
+        rm -f /etc/bash_completion.d/owebui
     ;;
 
     *)

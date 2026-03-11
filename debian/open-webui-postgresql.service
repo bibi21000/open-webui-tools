@@ -11,7 +11,7 @@ Type=simple
 
 # Environment files
 EnvironmentFile=/etc/open-webui/open-webui-postgresql.conf
-EnvironmentFile=/etc/default/open_webui
+EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 EnvironmentFile=-/run/open-webui/open-webui-postgresql.conf
 
@@ -20,28 +20,29 @@ ExecStartPre=-/usr/bin/docker rm -f owebui_postgresql
 # Check if Docker image is available
 ExecStartPre=/usr/lib/open-webui-tools/owebui_postgresql_env_cond \
     /etc/open-webui/open-webui-postgresql.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
 # Generate dynamic environment file
 ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
 ExecStartPre=/usr/lib/open-webui-tools/owebui_postgresql_env_pre \
     /etc/open-webui/open-webui-postgresql.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
 # Post process
 ExecStartPost=/usr/lib/open-webui-tools/owebui_postgresql_env_post \
     /etc/open-webui/open-webui-postgresql.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
 
 ExecStopPost=/usr/lib/open-webui-tools/owebui_postgresql_env_stop \
     /etc/open-webui/open-webui-postgresql.conf \
-    /etc/default/open_webui \
+    /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
+ExecStopPost=-/usr/bin/docker rm -f owebui_postgresql
 
 # Start the container in the foreground (no -d flag)
 ExecStart=/usr/bin/docker run \

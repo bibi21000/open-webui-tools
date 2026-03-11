@@ -42,7 +42,7 @@ docker_cmd = shutil.which('docker')
 systemctl_cmd = shutil.which('systemctl')
 
 # Do nothing if not enabled
-p = subprocess.run([systemctl_cmd, 'is-enabled', '--quiet', service], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+p = subprocess.run([systemctl_cmd, 'is-enabled', '--quiet', 'open-webui-%s' % service], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 if p.returncode != 0 and restart is False:
     print("Service %s is not enabled. Don't update it" % service, flush=True)
     sys.exit(0)
@@ -86,8 +86,7 @@ print("Id for %s : %s" % (image_ref, pull_imageid), flush=True)
 if force or (current_imageid != pull_imageid):
 
     # Local upgrade of image
-    app = service.split('-')[2]
-    p = subprocess.run(["/usr/lib/open-webui-tools/owebui_%s_env_upgrade" % app, pull_imageid],
+    p = subprocess.run(["/usr/lib/open-webui-tools/owebui_%s_env_upgrade" % service, pull_imageid],
             text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     if p.returncode != 0:
@@ -97,12 +96,12 @@ if force or (current_imageid != pull_imageid):
         sys.exit(5)
 
     # Restart if needed
-    p = subprocess.run([systemctl_cmd, 'is-active', '--quiet', service], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.run([systemctl_cmd, 'is-active', '--quiet', 'open-webui-%s' % service], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if p.returncode != 0 and restart is False:
         print("Service %s is not running. Not restart it" % service, flush=True)
         sys.exit(0)
     else:
-        p = subprocess.run([systemctl_cmd, 'restart', service], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.run([systemctl_cmd, 'restart', 'open-webui-%s' % service], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if p.returncode != 0:
             for err in p.stderr.split('\n'):
                 if err != '':

@@ -26,6 +26,31 @@ elif sys.argv[0].endswith('owebui_caddy_env_pre'):
         else:
             appport = data['OWEBUI_PORT']
 
+    if os.path.exists('/etc/open-webui/open-webui-glances.conf'):
+        if ("GLANCES_HOST" not in data or data['GLANCES_HOST'] == "" or data['GLANCES_HOST'] == "127.0.0.1"):
+            glip = get_container_ip("owebui_glances", docker_cmd=docker_cmd)
+            glport = '61208'
+        else:
+            glip = data['GLANCES_HOST']
+            if ("GLANCES_PORT" not in data or data['GLANCES_PORT'] == ""):
+                glport = '61208'
+            else:
+                glport = data['GLANCES_PORT']
+        mglances = {}
+        for i in range(5):
+            i = str(i)
+            if ("GLANCES_HOST_" + i in data):
+                if ("GLANCES_PORT_" + i not in data or data['GLANCES_PORT_' + i] == ""):
+                    mglances[i] ={
+                        "host" : data['GLANCES_HOST_' + i];
+                        "port": '61208'
+                    }
+                else:
+                    mglances[i] ={
+                        "host" : data['GLANCES_HOST_' + i];
+                        "port": data['GLANCES_PORT_' + i]
+                    }
+
     with open(retf, 'w') as f:
 
         if ("CADDY_HOST" not in data or data['CADDY_HOST'] == "") and \
@@ -67,7 +92,12 @@ elif sys.argv[0].endswith('owebui_caddy_env_pre'):
     with open(os.path.join(data['OWEBUI_CADDY'], 'conf', 'Caddyfile'), 'w') as f:
         with open('/etc/open-webui/Caddyfile', "r") as t:
             for line in t:
-                f.write(line.replace('{APP_IP}', appip).replace('{APP_PORT}', appport))
+                nline = line.replace('{APP_IP}', appip).replace('{APP_PORT}', appport)
+                if os.path.exists('/etc/open-webui/open-webui-glances.conf'):
+                    nline = nline.replace('{GLANCES_IP}', glip).replace('{GLANCES_PORT}', glport)
+                    for i in mglances:
+                        nline = nline.replace('{GLANCES_IP_ + i}', mglances[i]["host"]).replace('{GLANCES_PORT_ + i}', mglances[i]["port"])
+                f.write(nline)
 
 
 elif sys.argv[0].endswith('owebui_caddy_env_cond'):

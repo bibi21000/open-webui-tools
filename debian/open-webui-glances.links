@@ -1,0 +1,5 @@
+usr/lib/open-webui-tools/owebui_glances_env usr/lib/open-webui-tools/owebui_glances_env_pre
+usr/lib/open-webui-tools/owebui_glances_env usr/lib/open-webui-tools/owebui_glances_env_post
+usr/lib/open-webui-tools/owebui_glances_env usr/lib/open-webui-tools/owebui_glances_env_cond
+usr/lib/open-webui-tools/owebui_glances_env usr/lib/open-webui-tools/owebui_glances_env_upgrade
+usr/lib/open-webui-tools/owebui_glances_env usr/lib/open-webui-tools/owebui_glances_env_stop

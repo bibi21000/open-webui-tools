@@ -2,7 +2,7 @@
 OWEBUI_USER=owebui
 OWEBUI_GROUP=owebui
 OWEBUI_HOME=/var/lib/owebui
-OWEBUI_APP=/var/lib/owebui/data
+OWEBUI_APP=/var/lib/owebui/app
 OWEBUI_OLLAMA=/var/lib/owebui/ollama
 OWEBUI_CADDY=/var/lib/owebui/caddy
 OWEBUI_POSTGRESQL=/var/lib/owebui/postgresql

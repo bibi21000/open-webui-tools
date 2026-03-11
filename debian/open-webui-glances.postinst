@@ -18,9 +18,8 @@ set -e
 
 case "$1" in
     configure)
-        chmod u=rw,g=r,o= /etc/default/open-webui
-        chmod u=rw,g=r,o= /etc/open-webui/open-webui-local.conf
-        test -d /etc/bash_completion.d/ && _OWEBUI_COMPLETE=bash_source /usr/bin/owebui > /etc/bash_completion.d/owebui
+
+        chmod u=rw,g=r,o= /etc/open-webui/open-webui-glances.conf
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

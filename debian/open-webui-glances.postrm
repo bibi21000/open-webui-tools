@@ -22,21 +22,21 @@ case "$1" in
     ;;
 
     purge)
-        [ -f "/tmp/open-webui-caddy.conf" ] && . /tmp/open-webui-caddy.conf
+        [ -f "/tmp/open-webui-glances.conf" ] && . /tmp/open-webui-glances.conf
         [ -f "/tmp/open_webui" ] && . /tmp/open_webui
         [ -f "/tmp/open-webui-local.conf" ] && . /tmp/open-webui-local.conf
-        if test -v CADDY_IMAGE && test -n ${CADDY_IMAGE} && \
-          test -n "$(docker images -q ${CADDY_IMAGE} 2> /dev/null)" ; then
-            docker image rm -f ${CADDY_IMAGE}
+        if test -v GLANCES_IMAGE && test -n ${GLANCES_IMAGE} && \
+          test -n "$(docker images -q ${GLANCES_IMAGE} 2> /dev/null)" ; then
+            docker image rm -f ${GLANCES_IMAGE}
         fi
-        if test -v CADDY_IMAGE_SRC && test -n ${CADDY_IMAGE_SRC} && \
-          test -n "$(docker images -q ${CADDY_IMAGE_SRC} 2> /dev/null)" ; then
-            docker image rm -f ${CADDY_IMAGE_SRC}
+        if test -v GLANCES_IMAGE_SRC && test -n ${GLANCES_IMAGE_SRC} && \
+          test -n "$(docker images -q ${GLANCES_IMAGE_SRC} 2> /dev/null)" ; then
+            docker image rm -f ${GLANCES_IMAGE_SRC}
         fi
-        [ -f "/tmp/open-webui-caddy.conf" ] && rm -f "/tmp/open-webui-caddy.conf"
+        [ -f "/tmp/open-webui-glances.conf" ] && rm -f "/tmp/open-webui-glances.conf"
         [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
         [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
-        [ ! -z "$OWEBUI_CADDY" ] && rm -rf $OWEBUI_CADDY
+        [ ! -z "$OWEBUI_GLANCES" ] && rm -rf $OWEBUI_GLANCES
     ;;
 
     *)

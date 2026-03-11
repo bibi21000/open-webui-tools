@@ -54,7 +54,7 @@ elif sys.argv[0].endswith('owebui_docling_env_upgrade'):
     from owebui_tools import parse_files
 
     data, _ = parse_files(['/etc/open-webui/open-webui-docling.conf',
-            '/etc/default/open_webui',
+            '/etc/default/open-webui',
             '/etc/open-webui/open-webui-local.conf'], "docling")
     if 'DOCLING_IMAGE_SRC' not in data \
       or 'DOCLING_IMAGE_LANGS' not in data or \

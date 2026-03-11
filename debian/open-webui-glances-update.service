@@ -1,5 +1,5 @@
 [Unit]
-Description=Update Ollama Docker Container
+Description=Update Glances Docker Container
 # Only start after Docker is ready
 After=docker.service
 Requires=docker.service
@@ -9,11 +9,12 @@ After=network-online.target
 [Service]
 Type=oneshot
 
-EnvironmentFile=/etc/open-webui/open-webui-ollama.conf
+EnvironmentFile=/etc/open-webui/open-webui-glances.conf
 EnvironmentFile=/etc/default/open-webui
 EnvironmentFile=-/etc/open-webui/open-webui-local.conf
 
-ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${OLLAMA_IMAGE} ollama ${OLLAMA_IMAGE_LARGE}
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${GLANCES_IMAGE} glances ${GLANCES_IMAGE_LARGE}
 
 [Install]
 WantedBy=multi-user.target
+

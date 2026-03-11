@@ -152,3 +152,24 @@ It uses Docker images and stores data on disk in separate directories within /va
         > open-webui-ollama : active
         > open-webui-app : active
         > open-webui-docling : active
+
+- Customize your installation.
+
+    You can change user/group and directories creating a /etc/default/open-webui
+    before installing anything. Use the one in sources as a template
+
+    For example :
+
+    > /etc/default/open-webui
+
+    # Defaults for open-webui
+    OWEBUI_USER=owebui
+    OWEBUI_GROUP=owebui
+    OWEBUI_HOME=/home/owebui
+    OWEBUI_APP=/home/owebui/app
+    OWEBUI_OLLAMA=/home/owebui/ollama
+    OWEBUI_CADDY=/home/owebui/caddy
+    OWEBUI_POSTGRESQL=/home/owebui/postgresql
+    OWEBUI_SHARE=/home/owebui/share
+    OWEBUI_NAME="Open WebUI"
+

@@ -22,19 +22,18 @@ case "$1" in
     ;;
 
     purge)
-        if test -f "/tmp/open-webui-docling.conf"; then
-            . /tmp/open-webui-docling.conf
-            [ -f "/tmp/open_webui" ] && . /tmp/open_webui
-            [ -f "/tmp/open-webui-local.conf" ] && . /tmp/open-webui-local.conf
-            if ! test -z "$(docker images -q ${DOCLING_IMAGE} 2> /dev/null)" ; then
-                docker image rm ${DOCLING_IMAGE}
-            fi
-            if test -v DOCLING_IMAGE_SRC && test -n ${DOCLING_IMAGE_SRC} && \
-              test -n "$(docker images -q ${DOCLING_IMAGE_SRC} 2> /dev/null)" ; then
-                docker image rm ${DOCLING_IMAGE_SRC}
-            fi
-            rm -f "/tmp/open-webui-docling.conf"
+        [ -f "/tmp/open-webui-docling.conf" ] && . /tmp/open-webui-docling.conf
+        [ -f "/tmp/open_webui" ] && . /tmp/open_webui
+        [ -f "/tmp/open-webui-local.conf" ] && . /tmp/open-webui-local.conf
+        if test -v DOCLING_IMAGE && test -n ${DOCLING_IMAGE} && \
+          test -n "$(docker images -q ${DOCLING_IMAGE} 2> /dev/null)" ; then
+            docker image rm -f ${DOCLING_IMAGE}
         fi
+        if test -v DOCLING_IMAGE_SRC && test -n ${DOCLING_IMAGE_SRC} && \
+          test -n "$(docker images -q ${DOCLING_IMAGE_SRC} 2> /dev/null)" ; then
+            docker image rm -f ${DOCLING_IMAGE_SRC}
+        fi
+        [ -f "/tmp/open-webui-docling.conf" ] && rm -f "/tmp/open-webui-docling.conf"
         [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
         [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
         [ ! -z "$OWEBUI_DOCLING" ] && rm -rf $OWEBUI_DOCLING

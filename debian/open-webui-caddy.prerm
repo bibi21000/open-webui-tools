@@ -19,7 +19,7 @@ set -e
 
 case "$1" in
     remove)
-        [ -f "/etc/default/open_webui" ] && cp /etc/default/open_webui /tmp/open_webui
+        [ -f "/etc/default/open-webui" ] && cp /etc/default/open-webui /tmp/open_webui
         [ -f "/etc/open-webui/open-webui-caddy.conf" ] && cp /etc/open-webui/open-webui-caddy.conf /tmp/open-webui-caddy.conf
         [ -f "/etc/open-webui/open-webui-local.conf" ] && cp /etc/open-webui/open-webui-local.conf /tmp/open-webui-local.conf
     ;;

@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-VERSION:=0.0.22
+VERSION:=0.0.28
 DEBVERSION:=1
 ifndef DIST
 	DIST=jammy
@@ -13,7 +13,7 @@ clean:
 
 open-webui-tools-$(VERSION):
 	mkdir open-webui-tools-$(VERSION)
-	cp -a open_webui.* open-webui-tools-$(VERSION)/
+	cp -a open-webui.* open-webui-tools-$(VERSION)/
 	cp -a open-webui-*.conf open-webui-tools-$(VERSION)/
 	cp -a owebui*.py open-webui-tools-$(VERSION)/
 	cp -a Caddyfile open-webui-tools-$(VERSION)/

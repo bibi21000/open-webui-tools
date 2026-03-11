@@ -7,7 +7,7 @@
 	dh $@
 
 override_dh_auto_install:
-	install -m 640 open_webui.default debian/open-webui-common/etc/default/open_webui
+	install -m 640 open-webui.default debian/open-webui-common/etc/default/open-webui
 	install -m 640 open-webui-local.conf debian/open-webui-common/etc/open-webui/open-webui-local.conf
 	install -m 755 owebui.py debian/open-webui-common/usr/bin/owebui
 	python3 -m venv --system-site-packages debian/owebui-tmp
@@ -66,3 +66,10 @@ override_dh_auto_install:
 	install -D -m 644 debian/open-webui-docling-update.timer debian/open-webui-docling/usr/lib/systemd/system/open-webui-docling-update.timer
 	dh_installsystemd -p open-webui-docling --no-enable --no-start --name=open-webui-docling-update open-webui-docling-update.service
 	dh_installsystemd -p open-webui-docling --no-enable --no-start --name=open-webui-docling-update open-webui-docling-update.timer
+
+	install -m 755 owebui_glances_env.py debian/open-webui-glances/usr/lib/open-webui-tools/owebui_glances_env
+	install -m 640 open-webui-glances.conf debian/open-webui-glances/etc/open-webui/open-webui-glances.conf
+	install -D -m 644 debian/open-webui-glances-update.service debian/open-webui-glances/usr/lib/systemd/system/open-webui-glances-update.service
+	install -D -m 644 debian/open-webui-glances-update.timer debian/open-webui-glances/usr/lib/systemd/system/open-webui-glances-update.timer
+	dh_installsystemd -p open-webui-glances --no-enable --no-start --name=open-webui-glances-update open-webui-glances-update.service
+	dh_installsystemd -p open-webui-glances --no-enable --no-start --name=open-webui-glances-update open-webui-glances-update.timer
