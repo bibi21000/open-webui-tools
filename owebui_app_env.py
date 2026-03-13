@@ -57,6 +57,14 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
         docker_ol = f"OLLAMA_BASE_URL=http://{olip}:{olport}"
         sdockerenv = f"-e {docker_db} -e {docker_ol} "
         f.write(docker_ol + '\n')
+        if 'RAG_EMBEDDING_ENGINE' in dockerenv and \
+          (dockerenv['RAG_EMBEDDING_ENGINE'] == 'ollama' or\
+            dockerenv['RAG_EMBEDDING_ENGINE'] == '"ollama"' or\
+            dockerenv['RAG_EMBEDDING_ENGINE'] == "'ollama'") and \
+          'RAG_OLLAMA_BASE_URL' not in dockerenv:
+            docker_rol = f"RAG_OLLAMA_BASE_URL=http://{olip}:{olport}"
+            sdockerenv += f"-e {docker_rol} "
+            f.write(docker_rol + '\n')
         if 'VECTOR_DB' in dockerenv:
             sdockerenv += f"-e {docker_pgv} "
         for ev in dockerenv:

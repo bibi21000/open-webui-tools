@@ -25,7 +25,7 @@ It uses Docker images and stores data on disk in separate directories within /va
     [AMD Container Toolkit](https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html)
     and
     [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-    APT sources to your system :
+    APT sources to your system.
 
     This package must be installed separately before installing other packages.
 
@@ -218,7 +218,6 @@ It uses Docker images and stores data on disk in separate directories within /va
         app_RAG_EMBEDDING_MODEL=BAAI/bge-m3
         app_RAG_RELEVANCE_THRESHOLD=0.3
         app_RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
-        app_RAG_TEMPLATE="Tu es un assistant français précis et utile. Utilise UNIQUEMENT le contexte suivant comme source de vérité : <context> {context} </context>. Question de l'utilisateur : {query}. Réponds en français clair, naturel et structuré. Si l'information n'est pas dans le contexte, dis-le franchement. Ne mentionne jamais que tu utilises un contexte ou un RAG."
         app_API_KEYS=true
 
         OLLAMA_MODELS=llama3.2
