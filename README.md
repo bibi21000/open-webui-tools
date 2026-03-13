@@ -22,9 +22,11 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     This will add the Docker, AMD and NVIDIA Container Toolkit APT sources to your system :
 
-        - Install docker sources from https://docs.docker.com/engine/install/ubuntu/
-        - Install NVIDIA Container Toolkit from https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
-        - Install AMD Container Toolkit from https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html
+        - Install [docker](https://docs.docker.com/engine/install/ubuntu/)
+
+        - Install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+
+        - Install [AMD Container Toolkit](https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html)
 
     Must be installed separately before installing other packages.
 
@@ -38,9 +40,9 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui status
 
-        > open-webui-postgresql : activating
-        > open-webui-ollama : activating
-        > open-webui-app : inactive
+        >> open-webui-postgresql : activating
+        >> open-webui-ollama : activating
+        >> open-webui-app : inactive
 
 - Configure.
 
