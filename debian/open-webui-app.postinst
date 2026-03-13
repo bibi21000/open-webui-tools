@@ -18,6 +18,7 @@ set -e
 
 case "$1" in
     configure)
+        PATH=$PATH:/usr/local/bin
         chmod u=rw,g=r,o= /etc/open-webui/open-webui-app.conf
         INSTALL=0
         if ! cat /etc/docker/daemon.json | grep nvidia-container-runtime >/dev/null 2>&1; then

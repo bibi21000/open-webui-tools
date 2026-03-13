@@ -20,7 +20,13 @@ It uses Docker images and stores data on disk in separate directories within /va
 
 - Install dependency package.
 
-    This will add the Docker and NVIDIA Container Toolkit APT sources.
+    This will add the Docker, AMD and NVIDIA Container Toolkit APT sources to your system :
+
+        Install docker sources from https://docs.docker.com/engine/install/ubuntu/
+
+        Install NVIDIA Container Toolkit from https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
+        Install AMD Container Toolkit from https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html
 
     Must be installed separately before installing other packages.
 
@@ -114,6 +120,9 @@ It uses Docker images and stores data on disk in separate directories within /va
     Update the Caddyfile in /etc/open-webui. {APP_IP} and {APP_PORT} will
     be replaced with the appropriate values ​​when the service starts.
 
+    If you want to proxy glances server, {GLANCES_IP} and {GLANCES_PORT} will be replaced
+    too.
+
     You can find more documentation here : https://caddyserver.com/docs/caddyfile
 
     Download docker image and start service
@@ -162,16 +171,16 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo vim /etc/default/open-webui
 
-    # Defaults for open-webui
-    OWEBUI_USER=owebui
-    OWEBUI_GROUP=owebui
-    OWEBUI_HOME=/home/owebui
-    OWEBUI_APP=/home/owebui/app
-    OWEBUI_OLLAMA=/home/owebui/ollama
-    OWEBUI_CADDY=/home/owebui/caddy
-    OWEBUI_POSTGRESQL=/home/owebui/postgresql
-    OWEBUI_SHARE=/home/owebui/share
-    OWEBUI_NAME="Open WebUI"
+        # Defaults for open-webui
+        OWEBUI_USER=owebui
+        OWEBUI_GROUP=owebui
+        OWEBUI_HOME=/home/owebui
+        OWEBUI_APP=/home/owebui/app
+        OWEBUI_OLLAMA=/home/owebui/ollama
+        OWEBUI_CADDY=/home/owebui/caddy
+        OWEBUI_POSTGRESQL=/home/owebui/postgresql
+        OWEBUI_SHARE=/home/owebui/share
+        OWEBUI_NAME="Open WebUI"
 
     After installing installinf owebui-deps, create /etc/open-webui/open-webui-local.conf
 
@@ -209,6 +218,8 @@ It uses Docker images and stores data on disk in separate directories within /va
 
 
 - You can monitor resources on your hosts with open-webui-glances
+
+    Look at https://github.com/nicolargo/glances for more informations
 
     > sudo apt install open-webui-glances
 

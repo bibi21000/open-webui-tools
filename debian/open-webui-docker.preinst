@@ -45,7 +45,7 @@ EOF
         fi
 
         if ! test -f /etc/apt/sources.list.d/amd-container-toolkit.list; then
-            tee /etc/apt/sources.list.d/docker.list <<EOF
+            tee /etc/apt/sources.list.d/amd-container-toolkit.list <<EOF
 deb [arch=$(dpkg-architecture -q DEB_BUILD_ARCH) signed-by=/usr/share/keyrings/amd-container-toolkit-keyring.gpg] https://repo.radeon.com/amd-container-toolkit/apt/ $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main
 EOF
             INSTALL=1
