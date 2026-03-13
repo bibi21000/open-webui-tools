@@ -41,13 +41,13 @@ elif sys.argv[0].endswith('owebui_caddy_env_pre'):
             i = str(i)
             if ("GLANCES_HOST_" + i in data):
                 if ("GLANCES_PORT_" + i not in data or data['GLANCES_PORT_' + i] == ""):
-                    mglances[i] ={
-                        "host" : data['GLANCES_HOST_' + i];
+                    mglances[i] = {
+                        "host" : data['GLANCES_HOST_' + i],
                         "port": '61208'
                     }
                 else:
                     mglances[i] ={
-                        "host" : data['GLANCES_HOST_' + i];
+                        "host" : data['GLANCES_HOST_' + i],
                         "port": data['GLANCES_PORT_' + i]
                     }
 

@@ -13,7 +13,7 @@ set -e
 
 
 case "$1" in
-    install)
+    install|upgrade)
         INSTALL=0
         if ! test -f /usr/share/keyrings/docker-archive-keyring.gpg; then
             curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -39,12 +39,21 @@ EOF
             INSTALL=1
         fi
 
+        if ! test -f /usr/share/keyrings/amd-container-toolkit-keyring.gpg; then
+            curl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /usr/share/keyrings/amd-container-toolkit-keyring.gpg
+            INSTALL=1
+        fi
+
+        if ! test -f /etc/apt/sources.list.d/amd-container-toolkit.list; then
+            tee /etc/apt/sources.list.d/docker.list <<EOF
+deb [arch=$(dpkg-architecture -q DEB_BUILD_ARCH) signed-by=/usr/share/keyrings/amd-container-toolkit-keyring.gpg] https://repo.radeon.com/amd-container-toolkit/apt/ $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main
+EOF
+            INSTALL=1
+        fi
+
         if test $INSTALL -eq 1; then
             apt update
         fi
-    ;;
-
-    upgrade)
     ;;
 
     abort-upgrade)

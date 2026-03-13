@@ -9,10 +9,10 @@ from owebui_tools import parse_files
 
 SRVS = [ ('postgresql', 'POSTGRES_IMAGE', 'owebui_postgresql'),
           ('ollama', 'OLLAMA_IMAGE', 'owebui_ollama'),
+          ('docling', 'DOCLING_IMAGE', 'owebui_docling'),
           ('app', 'OWEBUI_IMAGE', 'owebui_app'),
           ('caddy', 'CADDY_IMAGE', 'owebui_caddy'),
           ('samba', 'SAMBA_IMAGE', 'owebui_samba'),
-          ('docling', 'DOCLING_IMAGE', 'owebui_docling'),
           ('glances', 'GLANCES_IMAGE', 'owebui_glances'),
         ]
 

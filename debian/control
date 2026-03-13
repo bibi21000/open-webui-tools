@@ -24,13 +24,16 @@ Depends: ${misc:Depends}, open-webui-common, ca-certificates, curl,
  gnupg2, jq
 Conflicts: docker.io, docker-compose, docker-compose-v2, docker-doc,
  podman-docker
-Description: Install docker and nvidia APT sources lists
+Description: Install docker, amd and nvidia APT sources lists
+ Install docker sources from https://docs.docker.com/engine/install/ubuntu/
+ Install NVIDIA Container Toolkit from https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+ Install AMD Container Toolkit from https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html
 
 Package: open-webui-app
 Architecture: all
 Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
  containerd.io, docker-buildx-plugin, docker-compose-plugin,
- postgresql-client, nvidia-container-toolkit
+ postgresql-client, nvidia-container-toolkit, amd-container-toolkit
 Recommends: open-webui-postgresql, open-webui-ollama
 Description: Open WebUI app
  Download image of Open WebUI and install startup scripts.
@@ -54,15 +57,16 @@ Package: open-webui-ollama
 Architecture: all
 Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
  containerd.io, docker-buildx-plugin, docker-compose-plugin,
- nvidia-container-toolkit
+ nvidia-container-toolkit, amd-container-toolkit
 Description: Ollama docker stuff
  Download image of Ollama and install startup scripts.
 
 Package: open-webui-docling
 Architecture: all
+Provides: open-webui-ocr
 Depends: ${misc:Depends}, open-webui-docker, docker-ce, docker-ce-cli,
  containerd.io, docker-buildx-plugin, docker-compose-plugin,
- nvidia-container-toolkit
+ nvidia-container-toolkit, amd-container-toolkit
 Description: Docling docker stuff
  Download image of docling and install startup scripts.
 
@@ -76,7 +80,7 @@ Description: Install Open WebUI main components
 Package: open-webui-deps
 Architecture: all
 Depends: ${misc:Depends}, open-webui-docker
-Description: Installs dependencies.
+Description: Install dependencies.
  Must be installed separately before installing other packages.
 
 Package: open-webui-caddy

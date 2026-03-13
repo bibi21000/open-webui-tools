@@ -33,9 +33,7 @@ case "$1" in
           test -n "$(docker images -q ${SAMBA_IMAGE_SRC} 2> /dev/null)" ; then
             docker image rm -f ${SAMBA_IMAGE_SRC}
         fi
-        [ -f "/tmp/open-webui-samba.conf" ] && rm -f "/tmp/open-webui-samba.conf"
-        [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
-        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
+        [ -f "/tmp/open-webui-samba.conf" ] && rm -f /tmp/open-webui-samba.conf
     ;;
 
     *)

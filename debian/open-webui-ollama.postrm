@@ -33,9 +33,7 @@ case "$1" in
           test -n "$(docker images -q ${OLLAMA_IMAGE_SRC} 2> /dev/null)" ; then
             docker image rm -f ${OLLAMA_IMAGE_SRC}
         fi
-        [ -f "/tmp/open-webui-ollama.conf" ] && rm -f "/tmp/open-webui-ollama.conf"
-        [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
-        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
+        [ -f "/tmp/open-webui-ollama.conf" ] && rm -f /tmp/open-webui-ollama.conf
         [ ! -z "$OWEBUI_OLLAMA" ] && rm -rf $OWEBUI_OLLAMA
     ;;
 

@@ -33,9 +33,7 @@ case "$1" in
           test -n "$(docker images -q ${DOCLING_IMAGE_SRC} 2> /dev/null)" ; then
             docker image rm -f ${DOCLING_IMAGE_SRC}
         fi
-        [ -f "/tmp/open-webui-docling.conf" ] && rm -f "/tmp/open-webui-docling.conf"
-        [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
-        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
+        [ -f "/tmp/open-webui-docling.conf" ] && rm -f /tmp/open-webui-docling.conf
         [ ! -z "$OWEBUI_DOCLING" ] && rm -rf $OWEBUI_DOCLING
     ;;
 

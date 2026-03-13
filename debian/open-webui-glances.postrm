@@ -34,9 +34,6 @@ case "$1" in
             docker image rm -f ${GLANCES_IMAGE_SRC}
         fi
         [ -f "/tmp/open-webui-glances.conf" ] && rm -f "/tmp/open-webui-glances.conf"
-        [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
-        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
-        [ ! -z "$OWEBUI_GLANCES" ] && rm -rf $OWEBUI_GLANCES
     ;;
 
     *)

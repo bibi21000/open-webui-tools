@@ -19,18 +19,27 @@ elif sys.argv[0].endswith('owebui_glances_env_pre'):
     with open(retf, 'w') as f:
 
         if ("GLANCES_HOST" not in data or data['GLANCES_HOST'] == "") and \
-          ("GLANCES_PORT" not in data or data['GLANCES_PORT'] == ""):
+          ("GLANCES_PORT" not in data or data['GLANCES_PORT'] == "") and \
+          ("GLANCES_PORT_TCP" not in data or data['GLANCES_PORT_TCP'] == ""):
             f.write("PORTMAP_CMD=\n")
             f.write("PORTMAP_ARG=\n")
+            f.write("PORTMAP_CMD_TCP=\n")
+            f.write("PORTMAP_ARG_TCP=\n")
         elif ("GLANCES_HOST" not in data or data['GLANCES_HOST'] == ""):
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG=%s:61208\n' % data['GLANCES_PORT'])
+            f.write("PORTMAP_CMD_TCP=-p\n")
+            f.write('PORTMAP_ARG_TCP=%s:61209\n' % data['GLANCES_PORT_TCP'])
         elif ("GLANCES_PORT" not in data or data['GLANCES_PORT'] == ""):
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG=%s:61208:61208\n' % data['GLANCES_HOST'])
+            f.write("PORTMAP_CMD_TCP=-p\n")
+            f.write('PORTMAP_ARG_TCP=%s:61209:61209\n' % data['GLANCES_HOST'])
         else:
             f.write("PORTMAP_CMD=-p\n")
             f.write('PORTMAP_ARG="%s:%s:61208"\n' % (data['GLANCES_HOST'], data['GLANCES_PORT']))
+            f.write("PORTMAP_CMD_TCP=-p\n")
+            f.write('PORTMAP_ARG_TCP="%s:%s:61209"\n' % (data['GLANCES_HOST'], data['GLANCES_PORT_TCP']))
         sdockerenv = '-e GLANCES_OPT="-w"'
         for ev in dockerenv:
             sdockerenv += f'-e {ev}={dockerenv[ev]} '

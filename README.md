@@ -156,11 +156,11 @@ It uses Docker images and stores data on disk in separate directories within /va
 - Customize your installation.
 
     You can change user/group and directories creating a /etc/default/open-webui
-    before installing anything. Use the one in sources as a template
+    before installing anything (before owebui-deps). Use the one in sources as a template
 
     For example :
 
-    > /etc/default/open-webui
+    > sudo vim /etc/default/open-webui
 
     # Defaults for open-webui
     OWEBUI_USER=owebui
@@ -173,3 +173,54 @@ It uses Docker images and stores data on disk in separate directories within /va
     OWEBUI_SHARE=/home/owebui/share
     OWEBUI_NAME="Open WebUI"
 
+    After installing installinf owebui-deps, create /etc/open-webui/open-webui-local.conf
+
+    For example
+
+    > sudo vim /etc/default/open-webui
+
+        # Local configuration for open-webui
+        # You can overwrite all configutation parameters in this file
+        # Add environment variables here
+
+        app_DEFAULT_LOCALE=fr
+        app_PDF_EXTRACT_IMAGES=true
+        app_RAG_TEXT_SPLITTER=token
+        app_CHUNK_SIZE=1024
+        app_CHUNK_OVERLAP=200
+        app_CHUNK_MIN_SIZE_TARGET=500
+        app_RAG_TOP_K=10
+        app_ENABLE_RAG_HYBRID_SEARCH=true
+        app_RAG_EMBEDDING_MODEL=BAAI/bge-m3
+        app_RAG_RELEVANCE_THRESHOLD=0.3
+        app_RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
+        app_RAG_TEMPLATE="Tu es un assistant français précis et utile. Utilise UNIQUEMENT le contexte suivant comme source de vérité : <context> {context} </context>. Question de l'utilisateur : {query}. Réponds en français clair, naturel et structuré. Si l'information n'est pas dans le contexte, dis-le franchement. Ne mentionne jamais que tu utilises un contexte ou un RAG."
+        app_API_KEYS=true
+
+        OLLAMA_MODELS=llama3.2
+
+        DOCLING_IMAGE_SRC=ghcr.io/docling-project/docling-serve-cpu:latest
+        DOCLING_IMAGE_LANGS="eng,fra,deu"
+        DOCLING_IMAGE=open-webui-docling-local
+        DOCLING_DEVICE=
+
+        OWEBUI_IMAGE=ghcr.io/open-webui/open-webui:main-slim
+        OWEBUI_DEVICE=
+
+
+- You can monitor resources on your hosts with open-webui-glances
+
+    > sudo apt install open-webui-glances
+
+    > sudo owebui update --force --restart glances
+
+    Check status
+
+    > sudo owebui status
+
+        > open-webui-postgresql : active
+        > open-webui-ollama : active
+        > open-webui-app : active
+        > open-webui-glances : active
+
+    And connect to http://127.0.0.1:61208

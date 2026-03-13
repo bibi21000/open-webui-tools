@@ -1,8 +1,24 @@
-open-webui-tools (0.0.27-1) UNRELEASED; urgency=medium
+open-webui-tools (0.1.7-1) UNRELEASED; urgency=medium
+
+  * Fist public release
+  * New upstream version
+  * New upstream version
+  * New upstream version
+  * New upstream version
+  * New upstream version
+  * New upstream version
+  * New upstream version
+  * New upstream version
+
+ -- Sebastien GALLET <bibi21000@gmail.com>  Fri, 13 Mar 2026 02:00:58 +0100
+
+open-webui-tools (0.0.29-1) UNRELEASED; urgency=medium
 
   * Add glances
+  * New upstream version
+  * New upstream version
 
- -- Sebastien GALLET <bibi21000@gmail.com>  Wed, 11 Mar 2026 00:06:50 +0100
+ -- Sebastien GALLET <bibi21000@gmail.com>  Wed, 11 Mar 2026 22:20:59 +0100
 
 open-webui-tools (0.0.27-1) UNRELEASED; urgency=medium
 

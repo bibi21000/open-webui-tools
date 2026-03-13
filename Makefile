@@ -1,8 +1,8 @@
 #!/usr/bin/make -f
-VERSION:=0.0.28
+VERSION:=0.1.7
 DEBVERSION:=1
 ifndef DIST
-	DIST=jammy
+	DIST=noble
 endif
 ifndef CHANGELOG
 	CHANGELOG="New upstream version"

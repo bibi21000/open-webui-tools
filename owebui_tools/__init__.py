@@ -7,6 +7,7 @@ open-webui-tools python library
 
 def parse_files(files, dockerapp):
     import os
+    import sys
     sysd = {}
     docker = {}
     dockerapp += '_'

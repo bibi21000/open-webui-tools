@@ -50,12 +50,16 @@ ExecStart=/usr/bin/docker run \
   --name owebui_glances \
   --rm \
   $PORTMAP_CMD $PORTMAP_ARG \
-  $PORTMAP_CMD_SSL $PORTMAP_ARG_SSL \
-  $PORTMAP_CMD_SSL $PORTMAP_ARG_UDP \
-  -v ${OWEBUI_CADDY}/www:/data \
-  -v ${OWEBUI_CADDY}/conf:/etc/glances \
-  $CADDY_ENV \
-  ${CADDY_IMAGE}
+  $PORTMAP_CMD_TCP $PORTMAP_ARG_TCP \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  -v /etc/os-release:/etc/os-release:ro \
+  --pid host \
+  $GLANCES_DEVICE \
+  $GLANCES_ENV \
+  ${GLANCES_IMAGE}
+
+# Nice Level
+Nice=19
 
 # Gracefully stop the container
 ExecStop=/usr/bin/docker stop -t 30 owebui_glances
