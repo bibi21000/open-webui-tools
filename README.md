@@ -20,13 +20,11 @@ It uses Docker images and stores data on disk in separate directories within /va
 
 - Install dependency package.
 
-    This will add the Docker, AMD and NVIDIA Container Toolkit APT sources to your system :
-
-    Install [docker](https://docs.docker.com/engine/install/ubuntu/)
-
-    Install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-
-    Install [AMD Container Toolkit](https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html)
+    This will add the [Docker](https://docs.docker.com/engine/install/ubuntu/),
+    [AMD Container Toolkit](https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html)
+    and
+    [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+    APT sources to your system :
 
     This package must be installed separately before installing other packages.
 
@@ -65,23 +63,23 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui update --force --models --restart
 
-        > Update POSTGRES_IMAGE for open-webui-postgresql
-        > Image pgvector/pgvector:pg18-trixie not found. Download it
-        > Id for pgvector/pgvector:pg18-trixie : 'sha256:cdc8b3de66a0fbffceef90077fde8845a2346034ad8f309f4022a84039fed955
-        > Service open-webui-postgresql restarted after update
+        Update POSTGRES_IMAGE for open-webui-postgresql
+        Image pgvector/pgvector:pg18-trixie not found. Download it
+        Id for pgvector/pgvector:pg18-trixie : 'sha256:cdc8b3de66a0fbffceef90077fde8845a2346034ad8f309f4022a84039fed955
+        Service open-webui-postgresql restarted after update
 
-        > Update OLLAMA_IMAGE for open-webui-ollama
-        > Image ollama/ollama not found. Download it
-        > Id for ollama/ollama : 'sha256:f2de8ed54c7b02ee05e42abaa454978c76fb552a883877b37588ebb62f31e41a
-        > Service open-webui-ollama restarted after update
+        Update OLLAMA_IMAGE for open-webui-ollama
+        Image ollama/ollama not found. Download it
+        Id for ollama/ollama : 'sha256:f2de8ed54c7b02ee05e42abaa454978c76fb552a883877b37588ebb62f31e41a
+        Service open-webui-ollama restarted after update
 
-        > Install ollama models
-        > Install model llama3.2
+        Install ollama models
+        Install model llama3.2
 
-        > Update OWEBUI_IMAGE for open-webui-app
-        > Image ghcr.io/open-webui/open-webui:cuda not found. Download it
-        > Id for ghcr.io/open-webui/open-webui:cuda : 'sha256:a301ed36e18a3507ec4f6edcdbff67bc7ef7a9f07824ac4c240799371dc75dfe
-        > Service open-webui-app restarted after update
+        Update OWEBUI_IMAGE for open-webui-app
+        Image ghcr.io/open-webui/open-webui:cuda not found. Download it
+        Id for ghcr.io/open-webui/open-webui:cuda : 'sha256:a301ed36e18a3507ec4f6edcdbff67bc7ef7a9f07824ac4c240799371dc75dfe
+        Service open-webui-app restarted after update
 
 - That's all
 
@@ -89,9 +87,9 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui status
 
-        > open-webui-postgresql : active
-        > open-webui-ollama : active
-        > open-webui-app : active
+        open-webui-postgresql : active
+        open-webui-ollama : active
+        open-webui-app : active
 
    You can now connect to http://127.0.0.1:8080
 
@@ -101,17 +99,17 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui update-enable
 
-        > Started open-webui-postgresql-update timer
-        > Started open-webui-ollama-update timer
-        > Started open-webui-app-update timer
+        Started open-webui-postgresql-update timer
+        Started open-webui-ollama-update timer
+        Started open-webui-app-update timer
 
     And check status using :
 
     > sudo owebui update-status
 
-        > open-webui-postgresql : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
-        > open-webui-ollama : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
-        > open-webui-app : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+        open-webui-postgresql : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+        open-webui-ollama : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+        open-webui-app : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
 
 - If you plan to connect from outside, it is recommended to use a frontend like Caddy.
 
@@ -133,10 +131,10 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui status
 
-        > open-webui-postgresql : active
-        > open-webui-ollama : active
-        > open-webui-app : active
-        > open-webui-caddy : active
+        open-webui-postgresql : active
+        open-webui-ollama : active
+        open-webui-app : active
+        open-webui-caddy : active
 
 - If you plan to do OCR, it is possible to install Docling.
 
@@ -157,10 +155,10 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui status
 
-        > open-webui-postgresql : active
-        > open-webui-ollama : active
-        > open-webui-app : active
-        > open-webui-docling : active
+        open-webui-postgresql : active
+        open-webui-ollama : active
+        open-webui-app : active
+        open-webui-docling : active
 
 - Customize your installation.
 
@@ -229,9 +227,9 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo owebui status
 
-        > open-webui-postgresql : active
-        > open-webui-ollama : active
-        > open-webui-app : active
-        > open-webui-glances : active
+        open-webui-postgresql : active
+        open-webui-ollama : active
+        open-webui-app : active
+        open-webui-glances : active
 
     And connect to http://127.0.0.1:61208
