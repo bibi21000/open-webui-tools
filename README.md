@@ -3,8 +3,7 @@
 This tutorial will guide you through installing Open WebUI connected to a
 PostgreSQL database (with the "vector" extension) and an Olama server.
 
-He also explains how to install caddy and docling
-
+He also explains how to install caddy, docling and glances
 It uses Docker images and stores data on disk in separate directories within /var/lib/owebui.
 
 
@@ -14,9 +13,11 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo apt update
 
+
 - Remove Docker installed by Ubuntu
 
     > sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
+
 
 - Install dependency package.
 
@@ -30,7 +31,8 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     > sudo apt install open-webui-deps
 
-- Installs main components.
+
+- Now you can installs main components.
 
     > sudo apt install open-webui
 
@@ -42,6 +44,7 @@ It uses Docker images and stores data on disk in separate directories within /va
         open-webui-ollama : activating
         open-webui-app : inactive
 
+
 - Configure.
 
     Modify the Docker images and configuration settings according to your hardware and needs.
@@ -52,9 +55,10 @@ It uses Docker images and stores data on disk in separate directories within /va
     You can define environment variable to pass to docker container by prefixing them with (service)_.
     For example, to change the logging level for the Open WebUI application, set app_GLOBAL_LOG_LEVEL=WARNING
 
-    Environment Variable for OpenWeb UI : https://docs.openwebui.com/reference/env-configuration/
-
-    Environment Variable for Ollama : https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image
+    Look at documentations for environment Variables of
+    [OpenWeb UI](https://docs.openwebui.com/reference/env-configuration/),
+    [Ollama](https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image) and
+    [Postgresql](https://github.com/docker-library/docs/blob/master/postgres/README.md)
 
 
 - Update and start.
@@ -81,6 +85,7 @@ It uses Docker images and stores data on disk in separate directories within /va
         Id for ghcr.io/open-webui/open-webui:cuda : 'sha256:a301ed36e18a3507ec4f6edcdbff67bc7ef7a9f07824ac4c240799371dc75dfe
         Service open-webui-app restarted after update
 
+
 - That's all
 
     All services should be operational
@@ -92,6 +97,7 @@ It uses Docker images and stores data on disk in separate directories within /va
         open-webui-app : active
 
    You can now connect to http://127.0.0.1:8080
+
 
 - Automatic update of the docker images
 
@@ -110,6 +116,7 @@ It uses Docker images and stores data on disk in separate directories within /va
         open-webui-postgresql : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
         open-webui-ollama : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
         open-webui-app : active (inactive) - Last run at Sun 2026-03-08 03:18:48 CET; 30s ago
+
 
 - If you plan to connect from outside, it is recommended to use a frontend like Caddy.
 
@@ -136,20 +143,29 @@ It uses Docker images and stores data on disk in separate directories within /va
         open-webui-app : active
         open-webui-caddy : active
 
+
 - If you plan to do OCR, it is possible to install Docling.
 
     > sudo apt install open-webui-docling
 
-    Add your langs to DOCLING_IMAGE_LANGS (check configuration file) to dowload
-    image and files needed for tesseract and update your local image.
+    By default, only english language is supported
+
+    If you need other language, add the following conf :
+
+        DOCLING_IMAGE_SRC=ghcr.io/docling-project/docling-serve-cpu:latest
+        DOCLING_IMAGE_LANGS="eng,fra,deu"
+        DOCLING_IMAGE=open-webui-docling-local
+
+    This will update the DOCLING_IMAGE_SRC image adding needed files
+    needed by tesseract for your langs (DOCLING_IMAGE_LANGS)
+    and update your local image (DOCLING_IMAGE).
+
+    Update your system to apply your changes
+
+    > sudo owebui update --restart --force docling
+
     This will create a basic DOCLING_PARAMS environment variable. You can
     define more complex defining app_DOCLING_PARAMS yourself.
-
-    > sudo owebui update --force --restart docling
-
-    Restart Open WebUI app
-
-    > sudo owebui restart app
 
     Check status
 
@@ -159,6 +175,7 @@ It uses Docker images and stores data on disk in separate directories within /va
         open-webui-ollama : active
         open-webui-app : active
         open-webui-docling : active
+
 
 - Customize your installation.
 
@@ -182,7 +199,7 @@ It uses Docker images and stores data on disk in separate directories within /va
 
     After installing installinf owebui-deps, create /etc/open-webui/open-webui-local.conf
 
-    For example
+    For example :
 
     > sudo vim /etc/default/open-webui
 
