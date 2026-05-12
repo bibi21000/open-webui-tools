@@ -20,18 +20,6 @@ case "$1" in
     configure)
         PATH=$PATH:/usr/local/bin
         chmod u=rw,g=r,o= /etc/open-webui/open-webui-docling.conf
-        INSTALL=0
-        if ! cat /etc/docker/daemon.json | grep nvidia-container-runtime >/dev/null 2>&1; then
-            nvidia-ctk runtime configure --runtime=docker
-            INSTALL=1
-        fi
-        if ! cat /etc/docker/daemon.json | grep amd-container-runtime >/dev/null 2>&1; then
-            amd-ctk runtime configure --runtime=docker
-            INSTALL=1
-        fi
-        if test $INSTALL -eq 1; then
-            systemctl restart docker
-        fi
         # Take long time to download
         if ! cat /etc/docker/daemon.json | grep "max-concurrent-uploads" >/dev/null 2>&1; then
             jq '. + { "max-concurrent-uploads": 1 }' /etc/docker/daemon.json > /tmp/tmp.$$.json && mv /tmp/tmp.$$.json /etc/docker/daemon.json

@@ -34,7 +34,7 @@ case "$1" in
             docker image rm -f ${OLLAMA_IMAGE_SRC}
         fi
         [ -f "/tmp/open-webui-ollama.conf" ] && rm -f /tmp/open-webui-ollama.conf
-        [ ! -z "$OWEBUI_OLLAMA" ] && rm -rf $OWEBUI_OLLAMA
+        [ ! -z "$OWEBUI_OLLAMA" ] && rm -rf $OWEBUI_OLLAMA || true
     ;;
 
     *)

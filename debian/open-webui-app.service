@@ -4,6 +4,7 @@ Description=Open WebUI Docker Container
 After=docker.service
 After=open-webui-ollama.service
 After=open-webui-postgresql.service
+After=open-webui-redis.service
 After=open-webui-docling.service
 Requires=docker.service
 # Wait for network to be available
@@ -37,6 +38,7 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_app_env_pre \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-app.conf
 
+# Post process
 ExecStopPost=/usr/lib/open-webui-tools/owebui_app_env_stop \
     /etc/open-webui/open-webui-app.conf \
     /etc/open-webui/open-webui-local.conf \
@@ -48,6 +50,7 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_app
 ExecStart=/usr/bin/docker run \
   --name owebui_app \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   $PORTMAP_CMD $PORTMAP_ARG \
   -v ${OWEBUI_APP}:/app/backend/data \
   $OWEBUI_DEVICE \

@@ -13,7 +13,7 @@ set -e
 
 
 case "$1" in
-    install)
+    install|upgrade)
 
         # If the package has default file it could be sourced, so that
         # the local admin can overwrite the defaults
@@ -26,16 +26,15 @@ case "$1" in
         [ -z "$OWEBUI_GROUP" ] && OWEBUI_GROUP=owebui
         [ -z "$OWEBUI_POSTGRESQL" ] && OWEBUI_POSTGRESQL=/var/lib/owebui/postgresql
 
-        test -d $OWEBUI_POSTGRESQL || mkdir -p $OWEBUI_POSTGRESQL
+        test -d $OWEBUI_POSTGRESQL/current || mkdir -p $OWEBUI_POSTGRESQL/current
         if ! dpkg-statoverride --list $OWEBUI_POSTGRESQL >/dev/null
         then
           #~ chown -R $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_POSTGRESQL
           chown $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_POSTGRESQL
           chmod u=rwx,g=rxs,o= $OWEBUI_POSTGRESQL
+          chown $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_POSTGRESQL/current
+          chmod u=rwx,g=rxs,o= $OWEBUI_POSTGRESQL/current
         fi
-    ;;
-
-    upgrade)
     ;;
 
     abort-upgrade)

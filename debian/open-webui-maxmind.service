@@ -1,0 +1,73 @@
+[Unit]
+Description=MaxMind Docker Container
+# Only start after Docker is ready
+After=docker.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=simple
+
+# Environment files
+EnvironmentFile=/etc/open-webui/open-webui-maxmind.conf
+EnvironmentFile=/etc/default/open-webui
+EnvironmentFile=-/etc/open-webui/open-webui-local.conf
+EnvironmentFile=-/run/open-webui/open-webui-maxmind.conf
+
+# Remove any existing container with this name before starting
+ExecStartPre=-/usr/bin/docker rm -f owebui_maxmind
+# Check if Docker image is available
+ExecStartPre=/usr/lib/open-webui-tools/owebui_maxmind_env_cond \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-maxmind.conf
+# Generate dynamic environment file
+ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
+ExecStartPre=/usr/lib/open-webui-tools/owebui_maxmind_env_pre \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-maxmind.conf
+
+# Post process
+ExecStartPost=/usr/lib/open-webui-tools/owebui_maxmind_env_post \
+    /etc/open-webui/open-webui-app.conf \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-maxmind.conf
+ExecStopPost=/usr/lib/open-webui-tools/owebui_maxmind_env_stop \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-maxmind.conf
+ExecStopPost=-/usr/bin/docker rm -f owebui_maxmind
+
+# Start the container in the foreground (no -d flag)
+ExecStart=/usr/bin/docker run \
+  --name owebui_maxmind \
+  --rm \
+  $OWEBUI_DOCKER_OPTS \
+  -v ${OWEBUI_MAXMIND}:/usr/share/GeoIP \
+  $MAXMIND_ENV \
+  ${MAXMIND_IMAGE}
+
+# Gracefully stop the container
+ExecStop=/usr/bin/docker stop -t 30 owebui_maxmind
+
+# Nice Level
+Nice=19
+
+# Timeout for start operation
+TimeoutStartSec=60
+# Timeout for stop operation
+TimeoutStopSec=35
+
+# Always restart on failure
+Restart=always
+RestartSec=45
+
+[Install]
+WantedBy=multi-user.target

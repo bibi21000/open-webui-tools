@@ -1,0 +1,70 @@
+[Unit]
+Description=GoAccess Docker Container
+# Only start after Docker is ready
+After=docker.service
+After=maxmind.service
+After=caddy.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=simple
+
+# Environment files
+EnvironmentFile=/etc/open-webui/open-webui-goaccess.conf
+EnvironmentFile=/etc/open-webui/open-webui-caddy.conf
+EnvironmentFile=/etc/default/open-webui
+EnvironmentFile=-/etc/open-webui/open-webui-local.conf
+EnvironmentFile=-/run/open-webui/open-webui-goaccess.conf
+
+# Remove any existing container with this name before starting
+ExecStartPre=-/usr/bin/docker rm -f owebui_goaccess
+# Check if Docker image is available
+ExecStartPre=/usr/lib/open-webui-tools/owebui_goaccess_env_cond \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/open-webui/open-webui-goaccess.conf \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-goaccess.conf
+# Generate dynamic environment file
+ExecStartPre=-/usr/bin/mkdir -p /run/open-webui
+ExecStartPre=/usr/lib/open-webui-tools/owebui_goaccess_env_pre \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/open-webui/open-webui-goaccess.conf \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-goaccess.conf
+
+# Post process
+ExecStopPost=/usr/lib/open-webui-tools/owebui_goaccess_env_stop \
+    /etc/open-webui/open-webui-caddy.conf \
+    /etc/open-webui/open-webui-goaccess.conf \
+    /etc/open-webui/open-webui-maxmind.conf \
+    /etc/default/open-webui \
+    /etc/open-webui/open-webui-local.conf \
+    /run/open-webui/open-webui-goaccess.conf
+ExecStopPost=-/usr/bin/docker rm -f owebui_goaccess
+
+# Start the container in the foreground (no -d flag)
+ExecStart=/bin/bash -c "${GOACCESS_RUN}"
+
+# Gracefully stop the container
+ExecStop=/usr/bin/docker stop -t 30 owebui_goaccess
+
+# Nice Level
+Nice=19
+
+# Timeout for start operation
+TimeoutStartSec=60
+# Timeout for stop operation
+TimeoutStopSec=35
+
+# Always restart on failure
+Restart=always
+RestartSec=45
+
+[Install]
+WantedBy=multi-user.target

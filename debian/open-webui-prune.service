@@ -1,0 +1,15 @@
+[Unit]
+Description=Prune Open WebUI Docker images
+# Only start after Docker is ready
+After=docker.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/docker image prune -f
+
+[Install]
+WantedBy=multi-user.target

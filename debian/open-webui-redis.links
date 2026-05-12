@@ -1,0 +1,5 @@
+usr/lib/open-webui-tools/owebui_redis_env usr/lib/open-webui-tools/owebui_redis_env_pre
+usr/lib/open-webui-tools/owebui_redis_env usr/lib/open-webui-tools/owebui_redis_env_post
+usr/lib/open-webui-tools/owebui_redis_env usr/lib/open-webui-tools/owebui_redis_env_cond
+usr/lib/open-webui-tools/owebui_redis_env usr/lib/open-webui-tools/owebui_redis_env_upgrade
+usr/lib/open-webui-tools/owebui_redis_env usr/lib/open-webui-tools/owebui_redis_env_stop

@@ -13,7 +13,7 @@ set -e
 
 
 case "$1" in
-    install)
+    install|upgrade)
         # If the package has default file it could be sourced, so that
         # the local admin can overwrite the defaults
 
@@ -32,9 +32,6 @@ case "$1" in
           chown $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_OLLAMA
           chmod u=rwx,g=rxs,o= $OWEBUI_OLLAMA
         fi
-    ;;
-
-    upgrade)
     ;;
 
     abort-upgrade)

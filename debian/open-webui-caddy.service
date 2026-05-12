@@ -33,6 +33,7 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_caddy_env_pre \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-caddy.conf
+
 # Post process
 ExecStartPost=/usr/lib/open-webui-tools/owebui_caddy_env_post \
     /etc/open-webui/open-webui-app.conf \
@@ -40,7 +41,6 @@ ExecStartPost=/usr/lib/open-webui-tools/owebui_caddy_env_post \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-caddy.conf
-
 ExecStopPost=/usr/lib/open-webui-tools/owebui_caddy_env_stop \
     /etc/open-webui/open-webui-caddy.conf \
     /etc/default/open-webui \
@@ -52,11 +52,13 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_caddy
 ExecStart=/usr/bin/docker run \
   --name owebui_caddy \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   $PORTMAP_CMD $PORTMAP_ARG \
   $PORTMAP_CMD_SSL $PORTMAP_ARG_SSL \
   $PORTMAP_CMD_SSL $PORTMAP_ARG_UDP \
   -v ${OWEBUI_CADDY}/www:/data \
-  -v ${OWEBUI_CADDY}/conf:/etc/caddy \
+  -v ${OWEBUI_CADDY}/conf:/etc/caddy:ro \
+  -v ${OWEBUI_CADDY}/logs:/logs \
   $CADDY_ENV \
   ${CADDY_IMAGE}
 

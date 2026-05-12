@@ -34,7 +34,7 @@ case "$1" in
             docker image rm -f ${OWEBUI_IMAGE_SRC}
         fi
         [ -f "/tmp/open-webui-app.conf" ] && rm -f /tmp/open-webui-app.conf
-        [ ! -z "$OWEBUI_APP" ] && rm -rf $OWEBUI_APP
+        [ ! -z "$OWEBUI_APP" ] && rm -rf $OWEBUI_APP || true
     ;;
 
     *)

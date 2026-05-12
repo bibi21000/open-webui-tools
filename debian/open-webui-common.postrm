@@ -30,10 +30,10 @@ case "$1" in
 
         deluser --quiet --system $OWEBUI_USER > /dev/null || true
         delgroup --quiet --system $OWEBUI_GROUP > /dev/null || true
-        rm -rf $OWEBUI_HOME
         rm -f /etc/bash_completion.d/owebui
         [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
-        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui    ;;
+        [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
+    ;;
 
     *)
         echo "postrm called with unknown argument \`$1'" >&2

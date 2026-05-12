@@ -2,6 +2,7 @@
 # See debhelper(7) (uncomment to enable)
 # output every command that modifies files on the build system.
 #export DH_VERBOSE = 1
+VERSION_CODENAME := $(shell grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -d= -f2)
 
 %:
 	dh $@
@@ -22,6 +23,12 @@ override_dh_auto_install:
 	rm -rf debian/open-webui-common/usr/lib/python3/dist-packages/owebui_tools*/__pycache__
 
 	install -m 755 owebui_docker_update.py debian/open-webui-docker/usr/lib/open-webui-tools/owebui_docker_update
+	install -D -m 644 debian/open-webui-prune.service debian/open-webui-docker/usr/lib/systemd/system/open-webui-prune.service
+	install -D -m 644 debian/open-webui-prune.timer debian/open-webui-docker/usr/lib/systemd/system/open-webui-prune.timer
+	dh_installsystemd -p open-webui-docker --no-enable --no-start --name=open-webui-prune open-webui-prune.service
+	dh_installsystemd -p open-webui-docker --no-enable --no-start --name=open-webui-prune open-webui-prune.timer
+
+	dpkg -x repo_radeon/$(VERSION_CODENAME)/amdgpu-install_*_all.deb debian/open-webui-docker-amd-source
 
 	install -m 755 owebui_app_env.py debian/open-webui-app/usr/lib/open-webui-tools/owebui_app_env
 	install -m 640 open-webui-app.conf debian/open-webui-app/etc/open-webui/open-webui-app.conf
@@ -44,6 +51,13 @@ override_dh_auto_install:
 	install -D -m 644 debian/open-webui-postgresql-update.timer debian/open-webui-postgresql/usr/lib/systemd/system/open-webui-postgresql-update.timer
 	dh_installsystemd -p open-webui-postgresql --no-enable --no-start --name=open-webui-postgresql-update open-webui-postgresql-update.service
 	dh_installsystemd -p open-webui-postgresql --no-enable --no-start --name=open-webui-postgresql-update open-webui-postgresql-update.timer
+
+	install -m 755 owebui_redis_env.py debian/open-webui-redis/usr/lib/open-webui-tools/owebui_redis_env
+	install -m 640 open-webui-redis.conf debian/open-webui-redis/etc/open-webui/open-webui-redis.conf
+	install -D -m 644 debian/open-webui-redis-update.service debian/open-webui-redis/usr/lib/systemd/system/open-webui-redis-update.service
+	install -D -m 644 debian/open-webui-redis-update.timer debian/open-webui-redis/usr/lib/systemd/system/open-webui-redis-update.timer
+	dh_installsystemd -p open-webui-redis --no-enable --no-start --name=open-webui-redis-update open-webui-redis-update.service
+	dh_installsystemd -p open-webui-redis --no-enable --no-start --name=open-webui-redis-update open-webui-redis-update.timer
 
 	install -m 755 owebui_caddy_env.py debian/open-webui-caddy/usr/lib/open-webui-tools/owebui_caddy_env
 	install -m 640 open-webui-caddy.conf debian/open-webui-caddy/etc/open-webui/open-webui-caddy.conf
@@ -73,3 +87,17 @@ override_dh_auto_install:
 	install -D -m 644 debian/open-webui-glances-update.timer debian/open-webui-glances/usr/lib/systemd/system/open-webui-glances-update.timer
 	dh_installsystemd -p open-webui-glances --no-enable --no-start --name=open-webui-glances-update open-webui-glances-update.service
 	dh_installsystemd -p open-webui-glances --no-enable --no-start --name=open-webui-glances-update open-webui-glances-update.timer
+
+	install -m 755 owebui_goaccess_env.py debian/open-webui-goaccess/usr/lib/open-webui-tools/owebui_goaccess_env
+	install -m 640 open-webui-goaccess.conf debian/open-webui-goaccess/etc/open-webui/open-webui-goaccess.conf
+	install -D -m 644 debian/open-webui-goaccess-update.service debian/open-webui-goaccess/usr/lib/systemd/system/open-webui-goaccess-update.service
+	install -D -m 644 debian/open-webui-goaccess-update.timer debian/open-webui-goaccess/usr/lib/systemd/system/open-webui-goaccess-update.timer
+	dh_installsystemd -p open-webui-goaccess --no-enable --no-start --name=open-webui-goaccess-update open-webui-goaccess-update.service
+	dh_installsystemd -p open-webui-goaccess --no-enable --no-start --name=open-webui-goaccess-update open-webui-goaccess-update.timer
+
+	install -m 755 owebui_maxmind_env.py debian/open-webui-maxmind/usr/lib/open-webui-tools/owebui_maxmind_env
+	install -m 640 open-webui-maxmind.conf debian/open-webui-maxmind/etc/open-webui/open-webui-maxmind.conf
+	install -D -m 644 debian/open-webui-maxmind-update.service debian/open-webui-maxmind/usr/lib/systemd/system/open-webui-maxmind-update.service
+	install -D -m 644 debian/open-webui-maxmind-update.timer debian/open-webui-maxmind/usr/lib/systemd/system/open-webui-maxmind-update.timer
+	dh_installsystemd -p open-webui-maxmind --no-enable --no-start --name=open-webui-maxmind-update open-webui-maxmind-update.service
+	dh_installsystemd -p open-webui-maxmind --no-enable --no-start --name=open-webui-maxmind-update open-webui-maxmind-update.timer

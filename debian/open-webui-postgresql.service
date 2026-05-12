@@ -30,13 +30,13 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_postgresql_env_pre \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
+
 # Post process
 ExecStartPost=/usr/lib/open-webui-tools/owebui_postgresql_env_post \
     /etc/open-webui/open-webui-postgresql.conf \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-postgresql.conf
-
 ExecStopPost=/usr/lib/open-webui-tools/owebui_postgresql_env_stop \
     /etc/open-webui/open-webui-postgresql.conf \
     /etc/default/open-webui \
@@ -48,11 +48,12 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_postgresql
 ExecStart=/usr/bin/docker run \
   --name owebui_postgresql \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
   -e POSTGRES_USER=${POSTGRES_USER} \
   -e POSTGRES_DB=${POSTGRES_DB} \
   $PORTMAP_CMD $PORTMAP_ARG \
-  -v ${OWEBUI_POSTGRESQL}:/var/lib/postgresql/18/docker \
+  -v ${OWEBUI_POSTGRESQL}/current:/var/lib/postgresql/18/docker \
   $POSTGRES_ENV \
   ${POSTGRES_IMAGE}
 

@@ -30,6 +30,7 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_glances_env_pre \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-glances.conf
+
 # Post process
 ExecStartPost=/usr/lib/open-webui-tools/owebui_glances_env_post \
     /etc/open-webui/open-webui-app.conf \
@@ -37,7 +38,6 @@ ExecStartPost=/usr/lib/open-webui-tools/owebui_glances_env_post \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-glances.conf
-
 ExecStopPost=/usr/lib/open-webui-tools/owebui_glances_env_stop \
     /etc/open-webui/open-webui-glances.conf \
     /etc/default/open-webui \
@@ -49,6 +49,7 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_glances
 ExecStart=/usr/bin/docker run \
   --name owebui_glances \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   $PORTMAP_CMD $PORTMAP_ARG \
   $PORTMAP_CMD_TCP $PORTMAP_ARG_TCP \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \

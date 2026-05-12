@@ -1,5 +1,6 @@
 #!/usr/bin/make -f
-VERSION:=0.1.14
+VERSION:=0.2.15
+RADEON_VERSION:=7.2.3.70203-1
 DEBVERSION:=1
 ifndef DIST
 	DIST=noble
@@ -18,6 +19,7 @@ open-webui-tools-$(VERSION):
 	cp -a owebui*.py open-webui-tools-$(VERSION)/
 	cp -a Caddyfile open-webui-tools-$(VERSION)/
 	cp -rfa owebui_tools open-webui-tools-$(VERSION)/
+	cp -rfa repo_radeon open-webui-tools-$(VERSION)/
 	cp -rfa pip open-webui-tools-$(VERSION)/
 	cp -a pyproject.toml open-webui-tools-$(VERSION)/
 	cp -a README.md open-webui-tools-$(VERSION)/
@@ -49,3 +51,8 @@ purge:
 	rm -f ../open-webui-tools_*
 	rm -f ../open-webui*.deb
 	-dpkg-buildpackage --pre-clean
+
+radeon:
+	mkdir -p repo_radeon
+	mkdir -p repo_radeon/noble
+	[ ! -f repo_radeon/noble/amdgpu-install_${RADEON_VERSION}_all.deb ] && cd repo_radeon/noble/ && wget https://repo.radeon.com/amdgpu-install/latest/ubuntu/noble/amdgpu-install_${RADEON_VERSION}_all.deb

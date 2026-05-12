@@ -21,15 +21,27 @@ It uses Docker images and stores data on disk in separate directories within /va
 
 - Install dependency package.
 
-    This will add the [Docker](https://docs.docker.com/engine/install/ubuntu/),
-    [AMD Container Toolkit](https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html)
-    and
-    [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-    APT sources to your system.
+    - For AMD or NVIDIA hardware, you need to install the source repositories first :
 
-    This package must be installed separately before installing other packages.
+      These packanges will add the [Docker](https://docs.docker.com/engine/install/ubuntu/),
+      [AMD Container Toolkit](https://instinct.docs.amd.com/projects/container-toolkit/en/latest/container-runtime/quick-start-guide.html)
+      and
+      [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+      APT sources to your system.
 
-    > sudo apt install open-webui-deps
+        > sudo apt install open-webui-docker-amd-source
+
+      or
+
+        > sudo apt install open-webui-docker-nvidia-source
+
+      After install the following package. This will download docker and configure it to use hardware specific packages :
+
+        > sudo apt install open-webui-docker-amd
+
+      or
+
+        > sudo apt install open-webui-docker-nvidia
 
 
 - Now you can installs main components.

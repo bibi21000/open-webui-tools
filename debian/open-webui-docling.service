@@ -31,6 +31,7 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_docling_env_pre \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-docling.conf
 
+# Post process
 ExecStopPost=/usr/lib/open-webui-tools/owebui_docling_env_stop \
     /etc/open-webui/open-webui-docling.conf \
     /etc/default/open-webui \
@@ -42,6 +43,7 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_docling
 ExecStart=/usr/bin/docker run \
   --name owebui_docling \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   $PORTMAP_CMD $PORTMAP_ARG \
   $DOCLING_DEVICE \
   $DOCLING_ENV \

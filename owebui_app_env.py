@@ -69,7 +69,7 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
             sdockerenv += f"-e {docker_pgv} "
         for ev in dockerenv:
             sdockerenv += f'-e {ev}={dockerenv[ev]} '
-        if os.path.exists('/etc/open-webui/open-webui-docling.conf'):
+        if os.path.exists('/etc/open-webui/open-webui-docling.conf') or "DOCLING_HOST" in data:
             sdockerenv += "-e CONTENT_EXTRACTION_ENGINE=docling "
             if ("DOCLING_HOST" not in data or data['DOCLING_HOST'] == "" or data['DOCLING_HOST'] == "127.0.0.1"):
                 dlip = get_container_ip("owebui_docling", docker_cmd=docker_cmd, time_out=10)
@@ -89,6 +89,22 @@ elif sys.argv[0].endswith('owebui_app_env_pre'):
                 sdockerenv += '''-e DOCLING_PARAMS='{"do_ocr": true, "ocr_engine": "tesseract", "ocr_lang": "%s"}' ''' % langs
             else:
                 sdockerenv += f'-e DOCLING_PARAMS={data['DOCLING_PARAMS']} '
+        if os.path.exists('/etc/open-webui/open-webui-redis.conf') or "REDIS_HOST" in data:
+            if ("REDIS_HOST" not in data or data['REDIS_HOST'] == "" or data['REDIS_HOST'] == "127.0.0.1"):
+                reip = get_container_ip("owebui_redis", docker_cmd=docker_cmd, time_out=10)
+                report = 6379
+            else:
+                reip = data['REDIS_HOST']
+                if ("REDIS_PORT" not in data or data['REDIS_PORT'] == ""):
+                    report = 6379
+                else:
+                    report = data['REDIS_PORT']
+            sdockerenv += f'-e REDIS_SERVER_URL=redis://{reip}:{report}/0 '
+            sdockerenv += f'-e ENABLE_WEBSOCKET_SUPPORT=true '
+            sdockerenv += f'-e WEBSOCKET_MANAGER=redis '
+            sdockerenv += f'-e WEBSOCKET_REDIS_URL=redis://{reip}:{report}/1 '
+            sdockerenv += f'-e REDIS_KEY_PREFIX=open-webui '
+
         f.write(f"OWEBUI_ENV={sdockerenv}\n")
     os.chmod(retf, 0o640)
 

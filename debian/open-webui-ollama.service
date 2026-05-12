@@ -31,6 +31,7 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_ollama_env_pre \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-ollama.conf
 
+# Post process
 ExecStopPost=/usr/lib/open-webui-tools/owebui_ollama_env_stop \
     /etc/open-webui/open-webui-ollama.conf \
     /etc/default/open-webui \
@@ -42,6 +43,7 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_ollama
 ExecStart=/usr/bin/docker run \
   --name owebui_ollama \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   $PORTMAP_CMD $PORTMAP_ARG \
   -v ${OWEBUI_OLLAMA}:/root/.ollama \
   $OLLAMA_DEVICE \

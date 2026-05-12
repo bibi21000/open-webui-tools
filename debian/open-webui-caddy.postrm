@@ -34,7 +34,7 @@ case "$1" in
             docker image rm -f ${CADDY_IMAGE_SRC}
         fi
         [ -f "/tmp/open-webui-caddy.conf" ] && rm -f /tmp/open-webui-caddy.conf
-        [ ! -z "$OWEBUI_CADDY" ] && rm -rf $OWEBUI_CADDY
+        [ ! -z "$OWEBUI_CADDY" ] && rm -rf $OWEBUI_CADDY || true
     ;;
 
     *)

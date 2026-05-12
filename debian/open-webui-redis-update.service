@@ -1,0 +1,19 @@
+[Unit]
+Description=Update Redis Docker Container
+# Only start after Docker is ready
+After=docker.service
+Requires=docker.service
+# Wait for network to be available
+After=network-online.target
+
+[Service]
+Type=oneshot
+
+EnvironmentFile=/etc/open-webui/open-webui-redis.conf
+EnvironmentFile=/etc/default/open-webui
+EnvironmentFile=-/etc/open-webui/open-webui-local.conf
+
+ExecStart=/usr/lib/open-webui-tools/owebui_docker_update ${REDIS_IMAGE} redis ${REDIS_IMAGE_LARGE}
+
+[Install]
+WantedBy=multi-user.target

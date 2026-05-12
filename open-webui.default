@@ -7,4 +7,8 @@ OWEBUI_OLLAMA=/var/lib/owebui/ollama
 OWEBUI_CADDY=/var/lib/owebui/caddy
 OWEBUI_POSTGRESQL=/var/lib/owebui/postgresql
 OWEBUI_SHARE=/var/lib/owebui/share
+OWEBUI_REDIS=/var/lib/owebui/redis
+OWEBUI_MAXMIND=/var/lib/owebui/maxmind
+OWEBUI_GOACCESS=/var/lib/owebui/goaccess
 OWEBUI_NAME="Open WebUI"
+#OWEBUI_DOCKER_OPTS="--security-opt apparmor=unconfined"

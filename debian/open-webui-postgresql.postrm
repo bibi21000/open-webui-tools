@@ -37,7 +37,7 @@ case "$1" in
         fi
         [ -f "/tmp/open-webui-local.conf" ] && rm -f /tmp/open-webui-local.conf
         [ -f "/tmp/open_webui" ] && rm -f /tmp/open_webui
-        [ ! -z "$OWEBUI_POSTGRESQL" ] && rm -rf $OWEBUI_POSTGRESQL
+        [ ! -z "$OWEBUI_POSTGRESQL" ] && rm -rf $OWEBUI_POSTGRESQL || true
     ;;
 
     *)

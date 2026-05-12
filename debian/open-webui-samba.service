@@ -30,13 +30,13 @@ ExecStartPre=/usr/lib/open-webui-tools/owebui_samba_env_pre \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-samba.conf
+
 # Post process
 ExecStartPost=/usr/lib/open-webui-tools/owebui_samba_env_post \
     /etc/open-webui/open-webui-samba.conf \
     /etc/default/open-webui \
     /etc/open-webui/open-webui-local.conf \
     /run/open-webui/open-webui-samba.conf
-
 ExecStopPost=/usr/lib/open-webui-tools/owebui_samba_env_stop \
     /etc/open-webui/open-webui-samba.conf \
     /etc/default/open-webui \
@@ -48,6 +48,7 @@ ExecStopPost=-/usr/bin/docker rm -f owebui_samba
 ExecStart=/usr/bin/docker run \
   --name owebui_samba \
   --rm \
+  $OWEBUI_DOCKER_OPTS \
   $PORTMAP_CMD_DS $PORTMAP_ARG_DS \
   $PORTMAP_CMD_SSN $PORTMAP_ARG_SSN \
   -v ${OWEBUI_SHARE}:/mnt \

@@ -1,5 +1,5 @@
 [Unit]
-Description=Update Ollama Docker Container
+Description=Update Postgresql Docker Container
 
 [Timer]
 OnCalendar=*-*-* 22:00

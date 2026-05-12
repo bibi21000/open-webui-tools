@@ -1,4 +1,11 @@
 # Caddy configuration file
+(logging) {
+	log {
+		output file /logs/access.log
+		format json
+	}
+}
 http:// {
+   import logging
    reverse_proxy {APP_IP}:{APP_PORT}
 }

@@ -34,7 +34,7 @@ case "$1" in
             docker image rm -f ${DOCLING_IMAGE_SRC}
         fi
         [ -f "/tmp/open-webui-docling.conf" ] && rm -f /tmp/open-webui-docling.conf
-        [ ! -z "$OWEBUI_DOCLING" ] && rm -rf $OWEBUI_DOCLING
+        [ ! -z "$OWEBUI_DOCLING" ] && rm -rf $OWEBUI_DOCLING || true
     ;;
 
     *)

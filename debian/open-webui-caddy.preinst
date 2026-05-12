@@ -13,7 +13,7 @@ set -e
 
 
 case "$1" in
-    install)
+    install|upgrade)
 
         # If the package has default file it could be sourced, so that
         # the local admin can overwrite the defaults
@@ -29,6 +29,7 @@ case "$1" in
         test -d $OWEBUI_CADDY || mkdir -p $OWEBUI_CADDY
         test -d $OWEBUI_CADDY/conf || mkdir $OWEBUI_CADDY/conf
         test -d $OWEBUI_CADDY/www || mkdir $OWEBUI_CADDY/www
+        test -d $OWEBUI_CADDY/logs || mkdir $OWEBUI_CADDY/logs
         if ! dpkg-statoverride --list $OWEBUI_CADDY >/dev/null
         then
           #~ chown -R $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_CADDY
@@ -45,9 +46,11 @@ case "$1" in
           chown $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_CADDY/www
           chmod u=rwx,g=rxs,o= $OWEBUI_CADDY/www
         fi
-    ;;
-
-    upgrade)
+        if ! dpkg-statoverride --list $OWEBUI_CADDY/logs >/dev/null
+        then
+          chown $OWEBUI_USER:$OWEBUI_GROUP $OWEBUI_CADDY/logs
+          chmod u=rwx,g=rxs,o= $OWEBUI_CADDY/logs
+        fi
     ;;
 
     abort-upgrade)
